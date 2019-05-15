@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity
 
         switch (id) {
             case R.id.nav_profile_info:
-                replaceFragment(new MyMedicationsFragment());
+                replaceFragment(new UserProfileFragment());
                 break;
 
             case R.id.nav_my_meds:
