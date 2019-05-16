@@ -22,9 +22,18 @@
     <string name="create_account">Create account</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="name">Name</string>
     <string name="last_name">Last name</string>
     <string name="first_name">First name</string>
     <string name="save">Save</string>
+    <string name="consumption_method">Route of administration:</string>
+    <string name="med_name">Med Name</string>
+    <string-array name="administration_routes">
+        <item>Orally</item>
+        <item>Nasally</item>
+        <item>Rectally</item>
+        <item>Inhalation</item>
+        <item>Injection</item>
+        <item></item>
+    </string-array>
 </resources>

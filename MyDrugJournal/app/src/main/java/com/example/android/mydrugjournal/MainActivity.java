@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case R.id.nav_my_meds:
-                replaceFragment(new EmergencyNumbersFragment());
+                replaceFragment(new MyMedicationsFragment());
                 break;
 
             case R.id.nav_my_allergies:
