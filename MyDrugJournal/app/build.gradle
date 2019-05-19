@@ -36,5 +36,6 @@ dependencies {
     implementation 'org.mongodb:stitch-android-sdk:4.2.1'
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'org.mongodb:stitch-android-sdk:4.2.1'
+    implementation 'com.hbb20:ccp:2.2.9'
 }
 

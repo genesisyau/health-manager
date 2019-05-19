@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.hbb20.CountryCodePicker;
 import com.mongodb.stitch.android.core.Stitch;
 import com.mongodb.stitch.android.core.auth.StitchUser;
 import com.mongodb.stitch.core.auth.providers.anonymous.AnonymousCredential;
@@ -31,6 +32,8 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
+
+        CountryCodePicker ccp = findViewById(R.id.CountryInput);
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
