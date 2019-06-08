@@ -82,6 +82,10 @@ public class MainActivity extends AppCompatActivity
                 replaceFragment(new UserProfileFragment());
                 break;
 
+            case R.id.nav_weekly_schedule:
+                replaceFragment(new WeeklyScheduleFragment());
+                break;
+
             case R.id.nav_my_meds:
                 replaceFragment(new MyMedicationsFragment());
                 break;
@@ -108,7 +112,6 @@ public class MainActivity extends AppCompatActivity
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                 newFragment).commit();
     }
-
 
     public void showDatePicker(View view){
         DialogFragment newFragment = new DatePickerFragment();
