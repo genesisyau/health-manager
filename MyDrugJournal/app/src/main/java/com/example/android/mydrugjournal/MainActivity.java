@@ -15,10 +15,11 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.hbb20.CountryCodePicker;
 import com.mongodb.stitch.android.core.Stitch;
 import com.mongodb.stitch.android.core.auth.StitchUser;
@@ -27,13 +28,19 @@ import com.mongodb.stitch.core.auth.providers.anonymous.AnonymousCredential;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
+
         Toolbar toolbar = findViewById(R.id.toolbar);
 
-        CountryCodePicker ccp = findViewById(R.id.CountryInput);
+        CountryCodePicker ccp = findViewById(R.id.countryInput);
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -74,6 +81,15 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        //Log.d("fb", currentUser.getEmail());
+        //updateUI(currentUser);
+    }
+
+    @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
 
@@ -82,12 +98,12 @@ public class MainActivity extends AppCompatActivity
                 replaceFragment(new UserProfileFragment());
                 break;
 
-            case R.id.nav_weekly_schedule:
-                replaceFragment(new WeeklyScheduleFragment());
-                break;
-
             case R.id.nav_my_meds:
                 replaceFragment(new MyMedicationsFragment());
+                break;
+
+            case R.id.nav_weekly_schedule:
+                replaceFragment(new WeeklyScheduleFragment());
                 break;
 
             case R.id.nav_my_allergies:
@@ -112,6 +128,7 @@ public class MainActivity extends AppCompatActivity
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                 newFragment).commit();
     }
+
 
     public void showDatePicker(View view){
         DialogFragment newFragment = new DatePickerFragment();

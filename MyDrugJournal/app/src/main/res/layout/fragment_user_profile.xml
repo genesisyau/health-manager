@@ -68,7 +68,6 @@
                         android:id="@+id/lastNameInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="20dp"
                         android:inputType="textPersonName" />
                 </LinearLayout>
 
@@ -121,7 +120,7 @@
                     android:textSize="16sp" />
 
                 <com.hbb20.CountryCodePicker
-                    android:id="@+id/CountryInput"
+                    android:id="@+id/countryInput"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     app:ccp_autoDetectCountry="true"
