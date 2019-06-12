@@ -1,11 +1,13 @@
 package com.example.android.mydrugjournal;
 
 
+import android.graphics.Color;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +18,11 @@ import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
 import com.hbb20.CountryCodePicker;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class WeeklyScheduleFragment extends Fragment {
@@ -45,33 +51,51 @@ public class WeeklyScheduleFragment extends Fragment {
         mWeekView.setEventLongPressListener(mEventLongPressListener);
     }
 
-    MonthLoader.MonthChangeListener mMonthChangeListener = new MonthLoader.MonthChangeListener() {
-        @Override
-        public List<WeekViewEvent> onMonthChange(int newYear, int newMonth) {
-            // Populate the week view with some events.
-            List<WeekViewEvent> events = getEvents(newYear, newMonth);
-            return events;
-        }
+    MonthLoader.MonthChangeListener mMonthChangeListener = (newYear, newMonth) -> {
+        // Populate the week view with some events.
+        List<WeekViewEvent> events = getEvents(newYear, newMonth);
+        Log.d("EVENT LENGTH", Integer.toString(events.size()));
+        return events;
     };
 
-    WeekView.EventClickListener mEventClickListener = new WeekView.EventClickListener() {
-        @Override
-        public void onEventClick(WeekViewEvent event, RectF eventRect) {
+    WeekView.EventClickListener mEventClickListener = (event, eventRect) -> {
 
-        }
     };
 
-    WeekView.EventLongPressListener mEventLongPressListener = new WeekView.EventLongPressListener() {
-        @Override
-        public void onEventLongPress(WeekViewEvent event, RectF eventRect) {
+    WeekView.EventLongPressListener mEventLongPressListener = (event, eventRect) -> {
 
-        }
     };
 
     public List<WeekViewEvent> getEvents(int newYear, int newMonth) {
-        List<WeekViewEvent> matchedEvents = new ArrayList<WeekViewEvent>();
+        List<WeekViewEvent> events = new ArrayList<>();
 
-        return matchedEvents;
+        // Initialize start and end time.
+        Calendar now = Calendar.getInstance();
+        Calendar eventTime = (Calendar) now.clone();
+        eventTime.set(Calendar.YEAR, newYear);
+        eventTime.set(Calendar.MONTH, newMonth);
+        eventTime.set(Calendar.DAY_OF_MONTH, 10);
+        eventTime.set(Calendar.HOUR_OF_DAY, 12);
+        eventTime.set(Calendar.MINUTE, 0);
+        Log.d("TIME", Long.toString(eventTime.getTimeInMillis()));
+
+        Calendar endTime = (Calendar) now.clone();
+        endTime.set(Calendar.YEAR, newYear);
+        endTime.set(Calendar.MONTH, newMonth);
+        endTime.set(Calendar.DAY_OF_MONTH, 10);
+        endTime.set(Calendar.HOUR_OF_DAY, 13);
+        endTime.set(Calendar.MINUTE, 0);
+
+        // Create an week view event.
+        WeekViewEvent weekViewEvent = new WeekViewEvent();
+        weekViewEvent.setId(12345);
+        weekViewEvent.setName("Pill 1");
+        weekViewEvent.setStartTime(eventTime);
+        weekViewEvent.setEndTime(endTime);
+        weekViewEvent.setColor(Color.parseColor("#32CD32"));
+
+        events.add(weekViewEvent);
+        return events;
     }
 
 }
