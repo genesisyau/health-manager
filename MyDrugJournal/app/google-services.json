@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "760748564431",
+    "firebase_url": "https://health-journal-742f1.firebaseio.com",
+    "project_id": "health-journal-742f1",
+    "storage_bucket": "health-journal-742f1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:760748564431:android:16a9234894db0390",
+        "android_client_info": {
+          "package_name": "com.example.android.mydrugjournal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "760748564431-krec4uu3ob9g3a6d5dk21qgn8uv3bi02.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC29v6W1CF-tdp_vwh5z7K8addGLydIqoc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "760748564431-krec4uu3ob9g3a6d5dk21qgn8uv3bi02.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

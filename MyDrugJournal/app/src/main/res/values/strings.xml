@@ -66,5 +66,12 @@
     <string name="final_project">Android final project by: 四資四</string>
     <string name="edit">Edit</string>
     <string name="password">Password</string>
+    <string name="contact_name">Contact name</string>
+    <string name="contact_address">Contact address</string>
+    <string name="contact_phone_number">Contact phone number</string>
+    <string name="cancel">Cancel</string>
+    <string name="details">Details</string>
+    <string name="allergen">Allergen</string>
+
     <string name="weekly_schedule">Weekly Schedule</string>
 </resources>
