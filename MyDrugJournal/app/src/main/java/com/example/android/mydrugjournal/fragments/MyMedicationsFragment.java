@@ -1,4 +1,4 @@
-package com.example.android.mydrugjournal;
+package com.example.android.mydrugjournal.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,8 +9,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
+
+import com.example.android.mydrugjournal.activities.AddNewMedicationActivity;
+import com.example.android.mydrugjournal.R;
 
 public class MyMedicationsFragment extends Fragment {
     private FloatingActionButton mFabAddMedication;

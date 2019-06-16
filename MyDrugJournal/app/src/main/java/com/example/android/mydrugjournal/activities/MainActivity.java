@@ -1,8 +1,7 @@
-package com.example.android.mydrugjournal;
+package com.example.android.mydrugjournal.activities;
 
 import android.icu.util.Calendar;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -11,20 +10,22 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.example.android.mydrugjournal.R;
+import com.example.android.mydrugjournal.fragments.AboutFragment;
+import com.example.android.mydrugjournal.fragments.DatePickerFragment;
+import com.example.android.mydrugjournal.fragments.EmergencyNumbersFragment;
+import com.example.android.mydrugjournal.fragments.MyAllergiesFragment;
+import com.example.android.mydrugjournal.fragments.MyMedicationsFragment;
+import com.example.android.mydrugjournal.fragments.UserProfileFragment;
+import com.example.android.mydrugjournal.fragments.WeeklyScheduleFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hbb20.CountryCodePicker;
-import com.mongodb.stitch.android.core.Stitch;
-import com.mongodb.stitch.android.core.auth.StitchUser;
-import com.mongodb.stitch.core.auth.providers.anonymous.AnonymousCredential;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {

@@ -1,4 +1,4 @@
-package com.example.android.mydrugjournal;
+package com.example.android.mydrugjournal.data;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

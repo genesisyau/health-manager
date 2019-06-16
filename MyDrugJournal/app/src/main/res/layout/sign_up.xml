@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:paddingVertical="@dimen/activity_vertical_margin"
     android:paddingHorizontal="@dimen/activity_horizontal_margin"
-    tools:context=".SignupActivity">
+    tools:context=".activities.SignupActivity">
 
     <ScrollView
         android:layout_width="match_parent"

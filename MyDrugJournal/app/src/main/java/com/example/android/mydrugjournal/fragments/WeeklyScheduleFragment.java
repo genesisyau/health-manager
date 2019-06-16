@@ -1,4 +1,4 @@
-package com.example.android.mydrugjournal;
+package com.example.android.mydrugjournal.fragments;
 
 
 import android.graphics.Color;
@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
+import com.example.android.mydrugjournal.R;
 import com.hbb20.CountryCodePicker;
 
 import java.text.ParseException;
