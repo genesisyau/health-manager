@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private NavigationView navigationView;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,14 +47,14 @@ public class MainActivity extends AppCompatActivity
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         navigationView = findViewById(R.id.nav_view);
-        View hView =  navigationView.getHeaderView(0);
+
+        View hView = navigationView.getHeaderView(0);
         TextView userEmail = hView.findViewById(R.id.userEmail);
         TextView userName = hView.findViewById(R.id.userName);
         ImageView userPic = hView.findViewById(R.id.userProfilePic);
         userEmail.setText(mAuth.getCurrentUser().getEmail());
-
 
 
         CountryCodePicker ccp = findViewById(R.id.countryInput);
@@ -74,11 +75,14 @@ public class MainActivity extends AppCompatActivity
         userPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                toolbar.setTitle(getResources().getString(R.string.profile_information));
                 replaceFragment(new UserProfileFragment());
                 DrawerLayout drawer = findViewById(R.id.drawer_layout);
                 drawer.closeDrawer(GravityCompat.START);
             }
         });
+
+
     }
 
     @Override
@@ -104,26 +108,32 @@ public class MainActivity extends AppCompatActivity
 
         switch (id) {
             case R.id.nav_profile_info:
+                toolbar.setTitle(getResources().getString(R.string.profile_information));
                 replaceFragment(new UserProfileFragment());
                 break;
 
             case R.id.nav_my_meds:
+                toolbar.setTitle(getResources().getString(R.string.my_medications));
                 replaceFragment(new MyMedicationsFragment());
                 break;
 
             case R.id.nav_weekly_schedule:
+                toolbar.setTitle(getResources().getString(R.string.weekly_schedule));
                 replaceFragment(new WeeklyScheduleFragment());
                 break;
 
             case R.id.nav_my_allergies:
+                toolbar.setTitle(getResources().getString(R.string.my_allergies));
                 replaceFragment(new MyAllergiesFragment());
                 break;
 
             case R.id.nav_about_and_feedback:
+                toolbar.setTitle(getResources().getString(R.string.about_and_feedback));
                 replaceFragment(new AboutFragment());
                 break;
 
             case R.id.nav_emergency_numbers:
+                toolbar.setTitle(getResources().getString(R.string.emergency_numbers));
                 replaceFragment(new EmergencyNumbersFragment());
                 break;
 
@@ -145,13 +155,13 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    public void showDatePicker(View view){
+    public void showDatePicker(View view) {
         DialogFragment newFragment = new DatePickerFragment();
-        newFragment.show(getSupportFragmentManager(),"datePicker");
+        newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
     public void processDatePickerResult(int year, int month, int day) {
-        String month_string = Integer.toString(month+1);
+        String month_string = Integer.toString(month + 1);
         String day_string = Integer.toString(day);
         String year_string = Integer.toString(year);
         String dateMessage = (month_string + "/" + day_string + "/" + year_string);
@@ -160,7 +170,7 @@ public class MainActivity extends AppCompatActivity
         calculateAge(Integer.parseInt(year_string), Integer.parseInt(month_string), Integer.parseInt(day_string));
     }
 
-    private void calculateAge(int year, int month, int day){
+    private void calculateAge(int year, int month, int day) {
         Calendar dob = Calendar.getInstance();
         Calendar today = Calendar.getInstance();
 
@@ -168,12 +178,14 @@ public class MainActivity extends AppCompatActivity
 
         int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
 
-        if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)){
+        if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)) {
             age--;
         }
 
         Integer ageInt = new Integer(age);
-        if ( ageInt < 0 ){ ageInt = 0;}
+        if (ageInt < 0) {
+            ageInt = 0;
+        }
         String ageS = ageInt.toString();
 
         EditText mAge = findViewById(R.id.ageInput);

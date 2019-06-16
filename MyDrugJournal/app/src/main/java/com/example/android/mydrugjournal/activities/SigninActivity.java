@@ -28,7 +28,7 @@ public class SigninActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sign_in);
+        setContentView(R.layout.activity_sign_in);
 
         mEmail = findViewById(R.id.emailInput);
         mPassword = findViewById(R.id.passwordInput);

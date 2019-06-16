@@ -36,7 +36,7 @@ public class SignupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sign_up);
+        setContentView(R.layout.activity_sign_up);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -45,7 +45,7 @@ public class SignupActivity extends AppCompatActivity {
         mPassword2 = findViewById(R.id.confirmPasswordInput);
         mSignupBtn = findViewById(R.id.signUpBtn);
 
-        mSignupBtn.setOnClickListener(new View.OnClickListener(){
+        mSignupBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 attemptSignUp();
             }
@@ -92,12 +92,12 @@ public class SignupActivity extends AppCompatActivity {
         Allergy allergy = new Allergy();
         allergy.setAllergen("");
         allergy.setDescription("");
-        allergens.put("allergyId", allergy);
+        allergens.put("allergyId1", allergy);
+        allergens.put("allergyId2", allergy);
 
-        if(!isCorrectForm(emailText, password1Text, password2Text)) {
+        if (!isCorrectForm(emailText, password1Text, password2Text)) {
             return;
         }
-
 
 
         mAuth.createUserWithEmailAndPassword(emailText, password1Text)
@@ -120,8 +120,7 @@ public class SignupActivity extends AppCompatActivity {
                             db.collection(user.getUid()).document("allergies").set(allergens);
 
                             startActivity(new Intent(SignupActivity.this, SigninActivity.class));
-                        }
-                        else {
+                        } else {
                             // If sign in fails, display a message to the user.
                             Log.w("TAG", "createUserWithEmail:failure", task.getException());
                             Toast.makeText(SignupActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
@@ -131,15 +130,15 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private boolean isCorrectForm(String email, String password1, String password2) {
-        if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password1) || TextUtils.isEmpty(password2)) {
+        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password1) || TextUtils.isEmpty(password2)) {
             Toast.makeText(getApplicationContext(), "Please fill all the fields", Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(!password1.equals(password2)) {
+        if (!password1.equals(password2)) {
             Toast.makeText(getApplicationContext(), "Passwords don't match", Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(password1.length() < 6) {
+        if (password1.length() < 6) {
             Toast.makeText(getApplicationContext(), "Password length must be greater than six", Toast.LENGTH_SHORT).show();
             return false;
         }
