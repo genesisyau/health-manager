@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -96,7 +97,7 @@ public class UserProfileFragment extends Fragment {
         tmp.setWeight(Double.parseDouble(mWeight.getText().toString()));
         tmp.setHeight(Double.parseDouble(mHeight.getText().toString()));
         tmp.setBirthDate(mBirthdate.getText().toString());
-        tmp.setCountry(mCountry.getSelectedCountryEnglishName());
+        tmp.setCountry(mCountry.getSelectedCountryNameCode());
         tmp.setLastName(mLastName.getText().toString());
         tmp.setFirstName(mFirstName.getText().toString());
 
@@ -165,10 +166,9 @@ public class UserProfileFragment extends Fragment {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-//                        user.setBloodType(document.getString("bloodType"));
-//                        user.setCountry(document.getString("country"));
-//                        user.setSex(document.getString("sex"));
-
+                        mBlood.setSelection(((ArrayAdapter<String>)mBlood.getAdapter()).getPosition(document.getString("bloodType")));
+                        mCountry.setCountryForNameCode(document.getString("country"));
+                        mSex.setSelection(((ArrayAdapter<String>)mSex.getAdapter()).getPosition(document.getString("sex")));
                         mFirstName.setText(document.getString("firstName"));
                         mLastName.setText(document.getString("lastName"));
                         mBirthdate.setText(document.getString("birthDate"));

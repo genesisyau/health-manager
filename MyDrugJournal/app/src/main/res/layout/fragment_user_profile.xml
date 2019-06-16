@@ -124,7 +124,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/country"
-                        android:textSize="16sp" />
+                        android:textSize="12sp"
+                        android:textColor="#999999"/>
 
                     <com.hbb20.CountryCodePicker
                         android:id="@+id/countryInput"
@@ -180,7 +181,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/sex"
-                        android:textSize="16sp" />
+                        android:textSize="12sp"
+                        android:textColor="#999999"/>
 
                     <Spinner
                         android:id="@+id/sexInput"
@@ -203,7 +205,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/blood_type"
-                        android:textSize="16sp" />
+                        android:textSize="12sp"
+                        android:textColor="#999999"/>
 
                     <Spinner
                         android:id="@+id/bloodInput"
