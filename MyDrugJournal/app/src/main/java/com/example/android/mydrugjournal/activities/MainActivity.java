@@ -1,5 +1,6 @@
 package com.example.android.mydrugjournal.activities;
 
+import android.content.Intent;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -13,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.mydrugjournal.R;
@@ -49,7 +51,10 @@ public class MainActivity extends AppCompatActivity
         View hView =  navigationView.getHeaderView(0);
         TextView userEmail = hView.findViewById(R.id.userEmail);
         TextView userName = hView.findViewById(R.id.userName);
+        ImageView userPic = hView.findViewById(R.id.userProfilePic);
         userEmail.setText(mAuth.getCurrentUser().getEmail());
+
+
 
         CountryCodePicker ccp = findViewById(R.id.countryInput);
         setSupportActionBar(toolbar);
@@ -65,6 +70,15 @@ public class MainActivity extends AppCompatActivity
 
         //Display weekly schedule fragment
         replaceFragment(new WeeklyScheduleFragment());
+
+        userPic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                replaceFragment(new UserProfileFragment());
+                DrawerLayout drawer = findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        });
     }
 
     @Override
@@ -111,6 +125,12 @@ public class MainActivity extends AppCompatActivity
 
             case R.id.nav_emergency_numbers:
                 replaceFragment(new EmergencyNumbersFragment());
+                break;
+
+            case R.id.nav_logout:
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(MainActivity.this, SigninActivity.class));
+                this.finish();
                 break;
         }
 
