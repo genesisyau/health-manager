@@ -74,4 +74,6 @@
     <string name="allergen">Allergen</string>
 
     <string name="weekly_schedule">Weekly Schedule</string>
+    <string name="log_out">Log out</string>
+    <string name="preferences">Preferences</string>
 </resources>

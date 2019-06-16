@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.android.mydrugjournal.R;
 import com.example.android.mydrugjournal.fragments.AboutFragment;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,11 @@ public class MainActivity extends AppCompatActivity
         db = FirebaseFirestore.getInstance();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
+        navigationView = findViewById(R.id.nav_view);
+        View hView =  navigationView.getHeaderView(0);
+        TextView userEmail = hView.findViewById(R.id.userEmail);
+        TextView userName = hView.findViewById(R.id.userName);
+        userEmail.setText(mAuth.getCurrentUser().getEmail());
 
         CountryCodePicker ccp = findViewById(R.id.countryInput);
         setSupportActionBar(toolbar);
