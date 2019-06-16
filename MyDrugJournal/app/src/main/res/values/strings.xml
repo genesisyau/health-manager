@@ -50,9 +50,9 @@
     <string name="country">Country</string>
     <string name="age">Age</string>
     <string-array name="administration_routes">
-        <item>Orally</item>
-        <item>Nasally</item>
-        <item>Rectally</item>
+        <item>Oral</item>
+        <item>Nasal</item>
+        <item>Rectal</item>
         <item>Inhalation</item>
         <item>Injection</item>
         <item></item>
@@ -76,4 +76,5 @@
     <string name="weekly_schedule">Weekly Schedule</string>
     <string name="log_out">Log out</string>
     <string name="preferences">Preferences</string>
+    <string name="add_to_calendar">ADD TO CALENDAR</string>
 </resources>

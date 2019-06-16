@@ -63,6 +63,8 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        //Display weekly schedule fragment
+        replaceFragment(new WeeklyScheduleFragment());
     }
 
     @Override
@@ -80,8 +82,6 @@ public class MainActivity extends AppCompatActivity
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        //Log.d("fb", currentUser.getEmail());
-        //updateUI(currentUser);
     }
 
     @Override
