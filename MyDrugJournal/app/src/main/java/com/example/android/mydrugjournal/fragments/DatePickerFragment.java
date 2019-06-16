@@ -1,4 +1,4 @@
-package com.example.android.mydrugjournal;
+package com.example.android.mydrugjournal.fragments;
 
 
 import android.app.DatePickerDialog;
@@ -13,6 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.TextView;
+
+import com.example.android.mydrugjournal.activities.MainActivity;
+import com.example.android.mydrugjournal.R;
 
 /**
  * A simple {@link Fragment} subclass.

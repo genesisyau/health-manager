@@ -1,4 +1,4 @@
-package com.example.android.mydrugjournal;
+package com.example.android.mydrugjournal.activities;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -11,6 +11,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.android.mydrugjournal.R;
+import com.example.android.mydrugjournal.data.Allergy;
+import com.example.android.mydrugjournal.data.EmergencyContact;
+import com.example.android.mydrugjournal.data.Medication;
+import com.example.android.mydrugjournal.data.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -18,11 +23,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 public class SignupActivity extends AppCompatActivity {
 

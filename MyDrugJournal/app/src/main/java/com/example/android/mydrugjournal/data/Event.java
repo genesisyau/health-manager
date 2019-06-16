@@ -1,4 +1,4 @@
-package com.example.android.mydrugjournal;
+package com.example.android.mydrugjournal.data;
 
 public class Event {
 
