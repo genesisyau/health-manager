@@ -90,7 +90,6 @@ public class UserProfileFragment extends Fragment {
 
     private void SaveData() {
         User tmp = new User();
-        Map<String, Object> newData = new HashMap<>();
 
         tmp.setBloodType(mBlood.getSelectedItem().toString());
         tmp.setSex(mSex.getSelectedItem().toString());

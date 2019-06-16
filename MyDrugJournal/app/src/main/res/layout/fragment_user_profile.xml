@@ -184,7 +184,7 @@
 
                     <Spinner
                         android:id="@+id/sexInput"
-                        android:layout_width="match_parent"
+                        android:layout_width="126dp"
                         android:layout_height="match_parent"
                         android:clickable="false"
                         android:entries="@array/sex_array"
