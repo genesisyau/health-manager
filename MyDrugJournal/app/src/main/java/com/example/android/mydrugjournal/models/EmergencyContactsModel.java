@@ -30,14 +30,18 @@ public class EmergencyContactsModel implements Subject {
     private FirebaseFirestore db;
     private FirebaseUser mCurrentUser;
 
+    private boolean isFetched;
+
     private EmergencyContactsModel(){
         db = FirebaseFirestore.getInstance();
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
-
+        isFetched = false;
         mContacts = new ArrayList<>();
         mObservers = new ArrayList<>();
         loadContacts();
     }
+
+    public boolean getIsFetched(){return isFetched;}
 
     public static EmergencyContactsModel getInstance() {
         return instance;
@@ -120,10 +124,12 @@ public class EmergencyContactsModel implements Subject {
                         }
 
                         notifyObservers();
+                        isFetched = true;
                     }
                 })
                 .addOnFailureListener(e -> {
 
                 });
+
     }
 }

@@ -29,7 +29,6 @@ public class EmergencyContactsFragment extends Fragment implements Observer, Eme
     private ProgressBar progressBar;
     private RecyclerView recyclerContacts;
     private EmergencyContactsRecyclerAdapter contactsAdapter;
-
     private EmergencyContactsModel mModel;
 
     @Nullable
@@ -41,15 +40,21 @@ public class EmergencyContactsFragment extends Fragment implements Observer, Eme
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         progressBar = getView().findViewById(R.id.progressBar);
         progressBar.setVisibility(getView().VISIBLE);
         mModel = EmergencyContactsModel.getInstance();
         mModel.register(this);
 
+        if (mModel.getIsFetched()) {
+            progressBar.setVisibility(getView().GONE);
+        } else {
+            progressBar.setVisibility(getView().VISIBLE);
+        }
+
         recyclerContacts = getView().findViewById(R.id.emergencyContactsRecyclerView);
         recyclerContacts.setLayoutManager(new LinearLayoutManager(getActivity()));
-        contactsAdapter = null;
+        contactsAdapter = new EmergencyContactsRecyclerAdapter(mModel.getContacts(), this);
+        recyclerContacts.setAdapter(contactsAdapter);
 
         mAddFab = getView().findViewById(R.id.addContactFab);
         mAddFab.setOnClickListener(onAddContactClicked);
@@ -81,19 +86,17 @@ public class EmergencyContactsFragment extends Fragment implements Observer, Eme
 
     @Override
     public void onContactCall(int position) {
-        Toast.makeText(getContext(), Integer.toString(position), Toast.LENGTH_SHORT).show();
         EmergencyContact contact = mModel.getContacts().get(position);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(getResources().getString(R.string.call_contact))
-            .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
-                Intent phoneIntent = new Intent(Intent.ACTION_DIAL);
-                phoneIntent.setData(Uri.parse("tel:" + contact.getPhoneNumber()));
-                startActivity(phoneIntent);
-            })
-            .setNegativeButton(getString(R.string.no), (dialog, which) ->
-                    Toast.makeText(getActivity(), "Call cancelled", Toast.LENGTH_SHORT).show()
-            ).show();
-
+                .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
+                    Intent phoneIntent = new Intent(Intent.ACTION_DIAL);
+                    phoneIntent.setData(Uri.parse("tel:" + contact.getPhoneNumber()));
+                    startActivity(phoneIntent);
+                })
+                .setNegativeButton(getString(R.string.no), (dialog, which) ->
+                        Toast.makeText(getActivity(), "Call cancelled", Toast.LENGTH_SHORT).show()
+                ).show();
     }
 }
