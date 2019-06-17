@@ -85,4 +85,6 @@
     <string name="choose_days">Choose days:</string>
     <string name="choose_time">Choose time:</string>
     <string name="add_date">Add Date</string>
+    <string name="please_choose_a_day">Please choose a day</string>
+    <string name="date_added">Date added</string>
 </resources>
