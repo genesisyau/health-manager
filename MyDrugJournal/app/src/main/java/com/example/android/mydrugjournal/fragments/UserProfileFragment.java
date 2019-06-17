@@ -17,6 +17,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.android.mydrugjournal.R;
+import com.example.android.mydrugjournal.activities.MainActivity;
 import com.example.android.mydrugjournal.data.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -29,7 +30,13 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hbb20.CountryCodePicker;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 
@@ -38,11 +45,13 @@ import java.util.Map;
  */
 public class UserProfileFragment extends Fragment {
 
-    private TextInputEditText mFirstName, mLastName, mBirthdate, mWeight, mHeight, mEmail;
+    private TextInputEditText mFirstName, mLastName, mBirthdate, mWeight, mHeight, mEmail, mAge;
     private Spinner mSex, mBlood;
     private CountryCodePicker mCountry;
     private ImageView mProfilePic;
     private Button mEditBtn, mSaveBtn;
+
+    private String date;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -52,6 +61,7 @@ public class UserProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        date = "";
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -68,6 +78,7 @@ public class UserProfileFragment extends Fragment {
         mSex = getView().findViewById(R.id.sexInput);
         mBlood = getView().findViewById(R.id.bloodInput);
         mCountry = getView().findViewById(R.id.countryInput);
+        mAge = getView().findViewById(R.id.ageInput);
         mProfilePic = getView().findViewById(R.id.profilePic);
         mEditBtn = getView().findViewById(R.id.editBtn);
         mSaveBtn = getView().findViewById(R.id.saveBtn);
@@ -175,6 +186,8 @@ public class UserProfileFragment extends Fragment {
                         mHeight.setText(String.format("%s", document.getDouble("height")));
                         mWeight.setText(String.format("%s", document.getDouble("weight")));
 
+                        date = document.getString("birthDate");
+                        setAge();
                     } else {
                         Log.d("fb", "No such document");
                     }
@@ -185,6 +198,24 @@ public class UserProfileFragment extends Fragment {
         });
 
         //Log.d("fb", user.getFirstName());
+    }
+
+    private void setAge() {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy",
+                    Locale.ENGLISH);
+            Date tmpDate = format.parse(date);
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(tmpDate);
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH) + 1;
+            int day = calendar.get(android.icu.util.Calendar.DAY_OF_MONTH);
+            int age = MainActivity.calculateAge(year, month, day);
+
+            mAge.setText(Integer.toString(age));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @Nullable

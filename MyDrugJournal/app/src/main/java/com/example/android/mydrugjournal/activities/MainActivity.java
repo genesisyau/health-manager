@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity
         TextView userEmail = hView.findViewById(R.id.userEmail);
         TextView userName = hView.findViewById(R.id.userName);
         ImageView userPic = hView.findViewById(R.id.userProfilePic);
-        userEmail.setText(mAuth.getCurrentUser().getEmail());
+        userEmail.setText(mAuth.getCurrentUser().getEmail() + "!");
 
         //test();
 
@@ -168,10 +168,14 @@ public class MainActivity extends AppCompatActivity
         String dateMessage = (month_string + "/" + day_string + "/" + year_string);
         EditText mBirthdate = findViewById(R.id.birthdateInput);
         mBirthdate.setText(dateMessage);
-        calculateAge(Integer.parseInt(year_string), Integer.parseInt(month_string), Integer.parseInt(day_string));
+
+        int age = calculateAge(Integer.parseInt(year_string), Integer.parseInt(month_string), Integer.parseInt(day_string));
+        EditText mAge = findViewById(R.id.ageInput);
+        mAge.setText(Integer.toString(age));
+
     }
 
-    private void calculateAge(int year, int month, int day) {
+    public static int calculateAge(int year, int month, int day) {
         Calendar dob = Calendar.getInstance();
         Calendar today = Calendar.getInstance();
 
@@ -187,10 +191,9 @@ public class MainActivity extends AppCompatActivity
         if (ageInt < 0) {
             ageInt = 0;
         }
-        String ageS = ageInt.toString();
 
-        EditText mAge = findViewById(R.id.ageInput);
-        mAge.setText(ageS);
+        return ageInt;
+
     }
 
 
