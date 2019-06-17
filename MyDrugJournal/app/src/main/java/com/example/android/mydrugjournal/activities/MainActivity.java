@@ -20,7 +20,7 @@ import android.widget.TextView;
 import com.example.android.mydrugjournal.R;
 import com.example.android.mydrugjournal.fragments.AboutFragment;
 import com.example.android.mydrugjournal.fragments.DatePickerFragment;
-import com.example.android.mydrugjournal.fragments.EmergencyNumbersFragment;
+import com.example.android.mydrugjournal.fragments.EmergencyContactsFragment;
 import com.example.android.mydrugjournal.fragments.MyAllergiesFragment;
 import com.example.android.mydrugjournal.fragments.MyMedicationsFragment;
 import com.example.android.mydrugjournal.fragments.UserProfileFragment;
@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity
         ImageView userPic = hView.findViewById(R.id.userProfilePic);
         userEmail.setText(mAuth.getCurrentUser().getEmail());
 
+        //test();
 
         CountryCodePicker ccp = findViewById(R.id.countryInput);
         setSupportActionBar(toolbar);
@@ -134,7 +135,7 @@ public class MainActivity extends AppCompatActivity
 
             case R.id.nav_emergency_numbers:
                 toolbar.setTitle(getResources().getString(R.string.emergency_numbers));
-                replaceFragment(new EmergencyNumbersFragment());
+                replaceFragment(new EmergencyContactsFragment());
                 break;
 
             case R.id.nav_logout:
@@ -191,5 +192,36 @@ public class MainActivity extends AppCompatActivity
         EditText mAge = findViewById(R.id.ageInput);
         mAge.setText(ageS);
     }
+
+
+
+//    private void test() {
+//        FirebaseUser user = mAuth.getCurrentUser();
+//        DocumentReference ref = db.collection(user.getUid()).document("allergies");
+//
+//        ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    DocumentSnapshot document = task.getResult();
+//                    if (document.exists()) {
+//                        Map<String, Object> tmp = new HashMap<>();
+//                        tmp = document.getData();
+//
+//                        for (Map.Entry<String, Object> entry : tmp.entrySet()) {
+//                            Log.d("allergy", entry.getKey() + ":" + entry.getValue().toString());
+//                        }
+//
+//                    } else {
+//                        Log.d("fb", "No such document");
+//                    }
+//                } else {
+//                    Log.d("fb", "get failed with ", task.getException());
+//                }
+//            }
+//        });
+//
+//    }
+
 }
 

@@ -10,21 +10,13 @@
 
         <ImageView
             android:id="@+id/appLogo"
-            android:layout_width="158dp"
-            android:layout_height="164dp"
+            android:layout_width="207dp"
+            android:layout_height="240dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="30dp"
             android:contentDescription="@string/app_logo"
-            app:srcCompat="@mipmap/ic_launcher_round" />
+            app:srcCompat="@drawable/app_logo" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/app_name"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:textSize="30sp"
-            android:layout_marginBottom="10dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -47,6 +39,6 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/rate_us"
+            android:text="@string/contact_us"
             android:layout_marginTop="20dp"/>
 </LinearLayout>
