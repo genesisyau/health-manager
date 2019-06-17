@@ -1,5 +1,8 @@
 package com.example.android.mydrugjournal.models;
 
+import android.util.Log;
+
+import com.example.android.mydrugjournal.data.Date;
 import com.example.android.mydrugjournal.data.Medication;
 import com.example.android.mydrugjournal.interfaces.Observer;
 import com.example.android.mydrugjournal.interfaces.Subject;
@@ -8,13 +11,17 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import ca.antonious.materialdaypicker.MaterialDayPicker;
 
 public class MedicationModel implements Subject {
     private static final MedicationModel instance = new MedicationModel();
@@ -24,11 +31,14 @@ public class MedicationModel implements Subject {
     private final String NAME_FIELD = "name";
     private final String DESCRIPTION_FIELD = "description";
     private final String ADMINISTRATION_FIELD = "administration";
+    private final String DATE_FIELD = "consumptionDates";
 
     private ArrayList<Medication> mMedications;
     private ArrayList<Observer> mObservers;
     private FirebaseFirestore mDb;
     private FirebaseUser mCurrentUser;
+
+    private Medication mTempMedication;
 
     private MedicationModel() {
         mDb = FirebaseFirestore.getInstance();
@@ -36,6 +46,7 @@ public class MedicationModel implements Subject {
 
         mMedications = new ArrayList<>();
         mObservers = new ArrayList<>();
+        mTempMedication = new Medication();
         loadMedications();
     }
 
@@ -50,17 +61,18 @@ public class MedicationModel implements Subject {
         return mMedications;
     }
 
-    public void addNewMedication(String name, String description, String adRoute) {
-        String newMedId = Integer.toString(mMedications.size());
+    public void addNewMedication() {
+        String newMedId = mMedications.size() + mTempMedication.getName();
+        mTempMedication.setId(newMedId);
 
         Map<String, Object> medication = new HashMap<>();
-        Medication med = new Medication(newMedId, name, description, adRoute);
-        medication.put(newMedId, med);
+        medication.put(newMedId, mTempMedication);
 
         mDb.collection(mCurrentUser.getUid()).document(MEDICATION_DOC_NAME).
                 set(medication, SetOptions.merge())
                 .addOnSuccessListener(aVoid -> {
-                    mMedications.add(new Medication(newMedId, name, description, adRoute));
+                    mMedications.add(mTempMedication);
+                    mTempMedication = null;
                     notifyObservers();
                 });
     }
@@ -74,7 +86,8 @@ public class MedicationModel implements Subject {
                     if (documentSnapshot.exists()) {
                         Map<String, Object> medications = documentSnapshot.getData();
                         for (Object medication : medications.values()) {
-                            Medication med = stringToClass(medication.toString());
+                            String json = new Gson().toJson(medication);
+                            Medication med = new Gson().fromJson(json, Medication.class);
 
                             if (med != null) {
                                 mMedications.add(med);
@@ -89,28 +102,24 @@ public class MedicationModel implements Subject {
                 });
     }
 
-    private Medication stringToClass(String data) {
-        JSONObject obj = null;
-        try {
-            obj = new JSONObject(data);
-        } catch (JSONException e) {
-            e.printStackTrace();
+    public void appendConsumptionDate(List<MaterialDayPicker.Weekday> days, String hour, String minutes) {
+        if (mTempMedication == null) {
+            mTempMedication = new Medication();
         }
 
-        try {
-            String id = obj != null ? obj.getString(ID_FIELD) : null;
-            String name = obj != null ? obj.getString(NAME_FIELD) : null;
-            String description = obj != null ? obj.getString(DESCRIPTION_FIELD) : null;
-            String administration = obj != null ? obj.getString(ADMINISTRATION_FIELD) : null;
-
-            return new Medication(id, name, description, administration);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        ArrayList<Date> dates = new ArrayList<>();
+        for (int n = 0; n < days.size(); n++) {
+            dates.add(new Date(days.get(n).toString(), hour + ":" + minutes));
         }
 
-        return null;
+        mTempMedication.setConsumptionDates(dates);
     }
 
+    public void setMedicationInfo(String medName, String medDesc, String medAdmin) {
+        mTempMedication.setName(medName);
+        mTempMedication.setDescription(medDesc);
+        mTempMedication.setAdministration(medAdmin);
+    }
 
     //***************************//
     //Subject Interface Functions//

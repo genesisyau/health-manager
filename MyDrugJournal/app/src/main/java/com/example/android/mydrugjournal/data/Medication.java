@@ -41,6 +41,15 @@ public class Medication implements Parcelable {
         administration = in.readString();
     }
 
+    public void setConsumptionDates(ArrayList<Date> dates) {
+        if (consumptionDates == null || consumptionDates.size() == 0) {
+            consumptionDates = dates;
+        }
+        else {
+            consumptionDates.addAll(dates);
+        }
+    }
+
     public static final Creator<Medication> CREATOR = new Creator<Medication>() {
         @Override
         public Medication createFromParcel(Parcel in) {

@@ -5,16 +5,16 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.example.android.mydrugjournal.R;
-import com.example.android.mydrugjournal.dialogs.AddToCalendarDialog;
+import com.example.android.mydrugjournal.data.Date;
 import com.example.android.mydrugjournal.models.MedicationModel;
+
+import java.util.ArrayList;
 
 public class AddNewMedicationActivity extends AppCompatActivity {
     private Toolbar mToolbar;
@@ -65,7 +65,8 @@ public class AddNewMedicationActivity extends AppCompatActivity {
         String medDesc = mEditTextDescription.getText().toString();
         String medAdmin = mSpinnerRoutes.getSelectedItem().toString();
 //
-        mModel.addNewMedication(medName, medDesc, medAdmin);
+        mModel.setMedicationInfo(medName, medDesc, medAdmin);
+        mModel.addNewMedication();
         finish();
     };
 
@@ -94,4 +95,5 @@ public class AddNewMedicationActivity extends AppCompatActivity {
         onBackPressed();
         return true;
     }
+
 }

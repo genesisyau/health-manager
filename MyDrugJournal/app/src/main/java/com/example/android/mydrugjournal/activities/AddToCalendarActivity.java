@@ -3,15 +3,14 @@ package com.example.android.mydrugjournal.activities;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.android.mydrugjournal.R;
 import com.example.android.mydrugjournal.models.MedicationModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ca.antonious.materialdaypicker.MaterialDayPicker;
@@ -49,14 +48,14 @@ public class AddToCalendarActivity extends AppCompatActivity {
     private View.OnClickListener onButtonAddDateClick = view -> {
         List<MaterialDayPicker.Weekday> daysSelected = mMaterialDayPicker.getSelectedDays();
         String hour = Integer.toString(mTimePicker.getHour());
-        String minute = Integer.toString(mTimePicker.getMinute());
+        String minutes = Integer.toString(mTimePicker.getMinute());
 
-
-        for (int n = 0; n < daysSelected.size(); n++) {
-            Log.i("DAY", daysSelected.get(n).toString());
+        if (daysSelected.size() > 0) {
+            mModel.appendConsumptionDate(daysSelected, hour, minutes);
+            Toast.makeText(this, getString(R.string.date_added), Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, getString(R.string.please_choose_a_day), Toast.LENGTH_SHORT).show();
         }
-
-        Log.i("TIME", hour + ":" + minute);
     };
 
     @Override
