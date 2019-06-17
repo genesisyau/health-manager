@@ -30,6 +30,8 @@ public class EmergencyContactsModel implements Subject {
     private FirebaseFirestore db;
     private FirebaseUser mCurrentUser;
 
+    private EmergencyContact tmpContact;
+
     private boolean isFetched;
 
     private EmergencyContactsModel(){
@@ -38,6 +40,7 @@ public class EmergencyContactsModel implements Subject {
         isFetched = false;
         mContacts = new ArrayList<>();
         mObservers = new ArrayList<>();
+        tmpContact = new EmergencyContact();
         loadContacts();
     }
 
@@ -60,7 +63,7 @@ public class EmergencyContactsModel implements Subject {
             String address = obj.getString(ADDRESS_FIELD);
             String phoneNumber = obj.getString(PHONE_NUMBER_FIELD);
 
-            return new EmergencyContact(name, address, phoneNumber);
+            return new EmergencyContact("", name, address, phoneNumber);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -81,15 +84,17 @@ public class EmergencyContactsModel implements Subject {
         }
     }
 
-    public void addNewEmergencyContact(String name, String address, String phoneNumber) {
+    public void addNewEmergencyContact() {
+        String newMedId = mContacts.size() + tmpContact.getName();
+        tmpContact.setId(newMedId);
+
         Map<String, Object> contacts = new HashMap<>();
-        EmergencyContact emergencyContact = new EmergencyContact(name, address, phoneNumber);
-        contacts.put(Integer.toString(mContacts.size()), emergencyContact);
+        contacts.put(Integer.toString(mContacts.size()), tmpContact);
 
         db.collection(mCurrentUser.getUid()).document(CONTACT_DOC_NAME).
-                set(emergencyContact, SetOptions.merge())
+                set(contacts, SetOptions.merge())
                 .addOnSuccessListener(aVoid -> {
-                    mContacts.add(new EmergencyContact(name, address, phoneNumber));
+                    mContacts.add(tmpContact);
                     notifyObservers();
                 });
     }
@@ -131,5 +136,11 @@ public class EmergencyContactsModel implements Subject {
 
                 });
 
+    }
+
+    public void setContactInfo(String contactName, String contactAddress, String contactPhoneNumber) {
+        tmpContact.setName(contactName);
+        tmpContact.setAddress(contactAddress);
+        tmpContact.setPhoneNumber(contactPhoneNumber);
     }
 }

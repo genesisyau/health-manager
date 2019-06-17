@@ -90,4 +90,6 @@
     <string name="call_contact">Call contact?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="address">Address</string>
+    <string name="phone_number">Phone number</string>
 </resources>

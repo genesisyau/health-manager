@@ -8,11 +8,13 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class EmergencyContact {
+    private String id;
     private String name;
     private String address;
     private String phoneNumber;
 
-    public EmergencyContact(String name, String address, String phoneNumber){
+    public EmergencyContact(String id, String name, String address, String phoneNumber){
+        this.id = id;
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;
