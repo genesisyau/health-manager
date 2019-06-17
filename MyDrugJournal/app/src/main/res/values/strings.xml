@@ -63,7 +63,7 @@
     <string name="rate_us">Rate us</string>
     <string name="david">練大衛 104590050</string>
     <string name="genesis">邱嘉香 104590049</string>
-    <string name="final_project">Android final project by: 四資四</string>
+    <string name="final_project">Android final project by:</string>
     <string name="edit">Edit</string>
     <string name="password">Password</string>
     <string name="contact_name">Contact name</string>
@@ -77,6 +77,8 @@
     <string name="log_out">Log out</string>
     <string name="preferences">Preferences</string>
     <string name="add_to_calendar">ADD TO CALENDAR</string>
+    <string name="contact_us">Contact us</string>
+    <string name="dummy_text">dummy text</string>
     <string name="add_to_calendar_message">Do you want to add this medication to your calendar?</string>
     <string name="add_to_calendar_button_text">Add to calendar</string>
     <string name="save_anyway">Save anyway</string>
