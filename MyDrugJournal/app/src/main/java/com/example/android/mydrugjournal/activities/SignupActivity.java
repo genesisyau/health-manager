@@ -45,11 +45,7 @@ public class SignupActivity extends AppCompatActivity {
         mPassword2 = findViewById(R.id.confirmPasswordInput);
         mSignupBtn = findViewById(R.id.signUpBtn);
 
-        mSignupBtn.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view) {
-                attemptSignUp();
-            }
-        });
+        mSignupBtn.setOnClickListener(view -> attemptSignUp());
     }
 
     @Override
