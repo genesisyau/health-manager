@@ -79,4 +79,10 @@
     <string name="add_to_calendar">ADD TO CALENDAR</string>
     <string name="contact_us">Contact us</string>
     <string name="dummy_text">dummy text</string>
+    <string name="add_to_calendar_message">Do you want to add this medication to your calendar?</string>
+    <string name="add_to_calendar_button_text">Add to calendar</string>
+    <string name="save_anyway">Save anyway</string>
+    <string name="choose_days">Choose days:</string>
+    <string name="choose_time">Choose time:</string>
+    <string name="add_date">Add Date</string>
 </resources>

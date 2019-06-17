@@ -48,41 +48,25 @@ public class MyMedicationsFragment extends Fragment implements Observer {
 
         recyclerMedications = getView().findViewById(R.id.my_recycler_view);
         recyclerMedications.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerAdapter = null;
+        setRecyclerAdapter();
 
         mFabAddMedication = getView().findViewById(R.id.fab_add_medication);
         mFabAddMedication.setOnClickListener(onAddMedicationClicked);
     }
 
-    private View.OnClickListener onAddMedicationClicked = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(getContext(), AddNewMedicationActivity.class);
-//            Bundle bundle = new Bundle();
-//            bundle.putParcelable(MODEL_KEY, mModel);
-//            intent.putExtras(bundle);
+    private View.OnClickListener onAddMedicationClicked = view -> {
+        Intent intent = new Intent(getContext(), AddNewMedicationActivity.class);
 
-            startActivity(intent);
-        }
+        startActivity(intent);
     };
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    private void setRecyclerAdapter() {
+        recyclerAdapter = new MedicationsRecyclerAdapter(mModel.getMedications());
+        recyclerMedications.setAdapter(recyclerAdapter);
     }
 
     @Override
     public void update() {
-        recyclerAdapter = new MedicationsRecyclerAdapter(mModel.getMedications());
-        recyclerMedications.setAdapter(recyclerAdapter);
-
-//        if (recyclerAdapter == null) {
-//            recyclerAdapter = new MedicationsRecyclerAdapter(mModel.getMedications());
-//            recyclerMedications.setAdapter(recyclerAdapter);
-//        }
-//        else {
-//            Log.i("UPDATE", "UPDATE");
-//            recyclerAdapter.updateList(mModel.getMedications());
-//        }
+        setRecyclerAdapter();
     }
 }

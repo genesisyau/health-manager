@@ -14,11 +14,19 @@ public class Medication implements Parcelable {
     private String name;
     private String description;
     private String administration;
+    private Date consumptionDate;
 
     public Medication(String name, String description, String adRoute) {
         this.name = name;
         this.description = description;
         this.administration = adRoute;
+    }
+
+    public Medication(String name, String description, String adRoute, Date date) {
+        this.name = name;
+        this.description = description;
+        this.administration = adRoute;
+        this.consumptionDate = date;
     }
 
     protected Medication(Parcel in) {
