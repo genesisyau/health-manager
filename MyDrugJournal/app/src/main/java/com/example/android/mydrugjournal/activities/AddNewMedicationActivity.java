@@ -1,11 +1,9 @@
 package com.example.android.mydrugjournal.activities;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.Parcel;
+import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -15,14 +13,14 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.android.mydrugjournal.R;
-import com.example.android.mydrugjournal.fragments.MyMedicationsFragment;
-import com.example.android.mydrugjournal.interfaces.Observer;
+import com.example.android.mydrugjournal.dialogs.AddToCalendarDialog;
 import com.example.android.mydrugjournal.models.MedicationModel;
 
 public class AddNewMedicationActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private Spinner mSpinnerRoutes;
     private Button mButtonSave;
+    private Button mButtonAddToCalendar;
     private TextInputEditText mEditTextName;
     private TextInputEditText mEditTextDescription;
     private MedicationModel mModel;
@@ -32,9 +30,6 @@ public class AddNewMedicationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_medication);
 
-//        Bundle bundle = getIntent().getExtras();
-//        mModel = bundle.getParcelable(MyMedicationsFragment.MODEL_KEY);
-//        mModel.setFirestoreInstance();
         mModel = MedicationModel.getInstance();
 
         //Setup toolbar
@@ -55,18 +50,28 @@ public class AddNewMedicationActivity extends AppCompatActivity {
         //Setup Button
         mButtonSave = findViewById(R.id.button_save_medication);
         mButtonSave.setOnClickListener(onButtonSaveClick);
+
+        mButtonAddToCalendar = findViewById(R.id.button_add_to_calendar);
+        mButtonAddToCalendar.setOnClickListener(onButtonAddToCalendarClick);
     }
 
     //************************//
     //*******Listeners********//
     //************************//
     private View.OnClickListener onButtonSaveClick = view -> {
-        String medName = mEditTextName.getText().toString();
-        String medDesc = mEditTextDescription.getText().toString();
-        String medAdmin = mSpinnerRoutes.getSelectedItem().toString();
+        AddToCalendarDialog dialog = new AddToCalendarDialog();
+        dialog.show(getSupportFragmentManager(), "confirmation dialog");
+//        String medName = mEditTextName.getText().toString();
+//        String medDesc = mEditTextDescription.getText().toString();
+//        String medAdmin = mSpinnerRoutes.getSelectedItem().toString();
+//
+//        mModel.addNewMedication(medName, medDesc, medAdmin);
+//        finish();
+    };
 
-        mModel.addNewMedication(medName, medDesc, medAdmin);
-        finish();
+    private View.OnClickListener onButtonAddToCalendarClick = view -> {
+        Intent intent = new Intent(this, AddToCalendarActivity.class);
+        startActivity(intent);
     };
 
     private AdapterView.OnItemSelectedListener onAdministrationRouteSelected = new AdapterView.OnItemSelectedListener() {
