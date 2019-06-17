@@ -34,7 +34,7 @@ public class EmergencyContactsFragment extends Fragment implements Observer, Eme
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_emergency_numbers, container, false);
+        return inflater.inflate(R.layout.fragment_emergency_contacts, container, false);
     }
 
     @Override
@@ -64,10 +64,6 @@ public class EmergencyContactsFragment extends Fragment implements Observer, Eme
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(getContext(), AddNewEmergencyContactActivity.class);
-//            Bundle bundle = new Bundle();
-//            bundle.putParcelable(MODEL_KEY, mModel);
-//            intent.putExtras(bundle);
-
             startActivity(intent);
         }
     };

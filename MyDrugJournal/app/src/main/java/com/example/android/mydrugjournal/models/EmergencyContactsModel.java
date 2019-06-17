@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,7 +35,7 @@ public class EmergencyContactsModel implements Subject {
 
     private boolean isFetched;
 
-    private EmergencyContactsModel(){
+    private EmergencyContactsModel() {
         db = FirebaseFirestore.getInstance();
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         isFetched = false;
@@ -44,36 +45,18 @@ public class EmergencyContactsModel implements Subject {
         loadContacts();
     }
 
-    public boolean getIsFetched(){return isFetched;}
+    public boolean getIsFetched() {
+        return isFetched;
+    }
 
     public static EmergencyContactsModel getInstance() {
         return instance;
     }
 
-    private EmergencyContact stringToClass(String data) {
-        JSONObject obj = null;
-        try {
-            obj = new JSONObject(data);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            String name = obj.getString(NAME_FIELD);
-            String address = obj.getString(ADDRESS_FIELD);
-            String phoneNumber = obj.getString(PHONE_NUMBER_FIELD);
-
-            return new EmergencyContact("", name, address, phoneNumber);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
     public ArrayList<EmergencyContact> getContacts() {
         return mContacts;
     }
+
     public ArrayList<Observer> getObservers() {
         return mObservers;
     }
@@ -124,8 +107,13 @@ public class EmergencyContactsModel implements Subject {
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                         Map<String, Object> contacts = documentSnapshot.getData();
-                        for (Object medication : contacts.values()) {
-                            mContacts.add(stringToClass(medication.toString()));
+                        for (Object contact : contacts.values()) {
+                            String json = new Gson().toJson(contact);
+                            EmergencyContact emergencyContact = new Gson().fromJson(json, EmergencyContact.class);
+
+                            if (contact != null) {
+                                mContacts.add(emergencyContact);
+                            }
                         }
 
                         notifyObservers();
