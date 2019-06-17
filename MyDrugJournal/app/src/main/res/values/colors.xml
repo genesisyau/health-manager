@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">#853CCA</color>
+    <color name="colorPrimaryDark">#CC67C7</color>
+    <color name="colorAccent">#4DB6AC</color>
 
-    <color name="dayPressed">#303F9F</color>
-    <color name="daySelected">#0000FF</color>
-    <color name="dayDeselected">@android:color/darker_gray</color>
+    <color name="dayPressed">#00574B</color>
+    <color name="daySelected">#008577</color>
+    <color name="dayDeselected">#4DB6AC</color>
 </resources>
