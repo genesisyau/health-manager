@@ -85,4 +85,7 @@
     <string name="choose_days">Choose days:</string>
     <string name="choose_time">Choose time:</string>
     <string name="add_date">Add Date</string>
+    <string name="call_contact">Call contact?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

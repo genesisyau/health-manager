@@ -1,6 +1,8 @@
 package com.example.android.mydrugjournal.fragments;
 
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,21 +10,23 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.android.mydrugjournal.R;
 import com.example.android.mydrugjournal.activities.AddNewEmergencyContactActivity;
 import com.example.android.mydrugjournal.adapters.EmergencyContactsRecyclerAdapter;
+import com.example.android.mydrugjournal.data.EmergencyContact;
 import com.example.android.mydrugjournal.interfaces.Observer;
 import com.example.android.mydrugjournal.models.EmergencyContactsModel;
 
-public class EmergencyContactsFragment extends Fragment implements Observer {
+public class EmergencyContactsFragment extends Fragment implements Observer, EmergencyContactsRecyclerAdapter.OnContactCallClickListener {
 
     private FloatingActionButton mAddFab;
+    private ProgressBar progressBar;
     private RecyclerView recyclerContacts;
     private EmergencyContactsRecyclerAdapter contactsAdapter;
 
@@ -38,6 +42,8 @@ public class EmergencyContactsFragment extends Fragment implements Observer {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        progressBar = getView().findViewById(R.id.progressBar);
+        progressBar.setVisibility(getView().VISIBLE);
         mModel = EmergencyContactsModel.getInstance();
         mModel.register(this);
 
@@ -68,10 +74,26 @@ public class EmergencyContactsFragment extends Fragment implements Observer {
 
     @Override
     public void update() {
-        Toast.makeText(getContext(), "update", Toast.LENGTH_SHORT).show();
-        contactsAdapter = new EmergencyContactsRecyclerAdapter(mModel.getContacts());
+        contactsAdapter = new EmergencyContactsRecyclerAdapter(mModel.getContacts(), this);
         recyclerContacts.setAdapter(contactsAdapter);
-
+        progressBar.setVisibility(getView().GONE);
     }
 
+    @Override
+    public void onContactCall(int position) {
+        Toast.makeText(getContext(), Integer.toString(position), Toast.LENGTH_SHORT).show();
+        EmergencyContact contact = mModel.getContacts().get(position);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(getResources().getString(R.string.call_contact))
+            .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
+                Intent phoneIntent = new Intent(Intent.ACTION_DIAL);
+                phoneIntent.setData(Uri.parse("tel:" + contact.getPhoneNumber()));
+                startActivity(phoneIntent);
+            })
+            .setNegativeButton(getString(R.string.no), (dialog, which) ->
+                    Toast.makeText(getActivity(), "Call cancelled", Toast.LENGTH_SHORT).show()
+            ).show();
+
+    }
 }
