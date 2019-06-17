@@ -74,5 +74,7 @@
     <string name="allergen">Allergen</string>
 
     <string name="weekly_schedule">Weekly Schedule</string>
+    <string name="log_out">Log out</string>
+    <string name="preferences">Preferences</string>
     <string name="add_to_calendar">ADD TO CALENDAR</string>
 </resources>

@@ -6,42 +6,43 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_profile_info"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_person"
             android:title="@string/profile_information" />
         <item
             android:id="@+id/nav_weekly_schedule"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_calendar"
             android:title="@string/weekly_schedule" />
         <item
             android:id="@+id/nav_my_meds"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_pill"
             android:title="@string/my_medications" />
         <item
             android:id="@+id/nav_my_allergies"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_allergy"
             android:title="@string/my_allergies" />
 
         <item
             android:id="@+id/nav_emergency_numbers"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_contact"
             android:title="@string/emergency_numbers" />
 
-        <item
-            android:id="@+id/nav_about_and_feedback"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/about_and_feedback" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="More">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:id="@+id/nav_preferences"
+                android:icon="@drawable/ic_settings"
+                android:title="@string/preferences" />
+
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:id="@+id/nav_about_and_feedback"
+                android:icon="@drawable/ic_feedback"
+                android:title="@string/about_and_feedback" />
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_logout"
+                android:title="@string/log_out" />
         </menu>
     </item>
 
