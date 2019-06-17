@@ -3,6 +3,9 @@ package com.example.android.mydrugjournal.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,22 +14,25 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class Medication implements Parcelable {
+    private String id;
     private String name;
     private String description;
     private String administration;
-    private Date consumptionDate;
+    private ArrayList<Date> consumptionDates;
 
-    public Medication(String name, String description, String adRoute) {
+    public Medication(String id, String name, String description, String adRoute) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.administration = adRoute;
     }
 
-    public Medication(String name, String description, String adRoute, Date date) {
+    public Medication(String id, String name, String description, String adRoute, ArrayList<Date> dates) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.administration = adRoute;
-        this.consumptionDate = date;
+        this.consumptionDates = dates;
     }
 
     protected Medication(Parcel in) {

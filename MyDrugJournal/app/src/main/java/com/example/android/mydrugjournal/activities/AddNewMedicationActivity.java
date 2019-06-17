@@ -59,14 +59,14 @@ public class AddNewMedicationActivity extends AppCompatActivity {
     //*******Listeners********//
     //************************//
     private View.OnClickListener onButtonSaveClick = view -> {
-        AddToCalendarDialog dialog = new AddToCalendarDialog();
-        dialog.show(getSupportFragmentManager(), "confirmation dialog");
-//        String medName = mEditTextName.getText().toString();
-//        String medDesc = mEditTextDescription.getText().toString();
-//        String medAdmin = mSpinnerRoutes.getSelectedItem().toString();
+//        AddToCalendarDialog dialog = new AddToCalendarDialog();
+//        dialog.show(getSupportFragmentManager(), "confirmation dialog");
+        String medName = mEditTextName.getText().toString();
+        String medDesc = mEditTextDescription.getText().toString();
+        String medAdmin = mSpinnerRoutes.getSelectedItem().toString();
 //
-//        mModel.addNewMedication(medName, medDesc, medAdmin);
-//        finish();
+        mModel.addNewMedication(medName, medDesc, medAdmin);
+        finish();
     };
 
     private View.OnClickListener onButtonAddToCalendarClick = view -> {

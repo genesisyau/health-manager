@@ -1,21 +1,13 @@
 package com.example.android.mydrugjournal.models;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.util.Log;
-
 import com.example.android.mydrugjournal.data.Medication;
 import com.example.android.mydrugjournal.interfaces.Observer;
 import com.example.android.mydrugjournal.interfaces.Subject;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.SetOptions;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,13 +15,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Observable;
 
 public class MedicationModel implements Subject {
     private static final MedicationModel instance = new MedicationModel();
 
     private final String MEDICATION_DOC_NAME = "meds";
+    private final String ID_FIELD = "id";
     private final String NAME_FIELD = "name";
     private final String DESCRIPTION_FIELD = "description";
     private final String ADMINISTRATION_FIELD = "administration";
@@ -52,38 +43,6 @@ public class MedicationModel implements Subject {
         return instance;
     }
 
-
-//    //************************//
-//    //**Parcelable Functions**//
-//    //************************//
-//    protected MedicationModel(Parcel in) {
-//        mMedications = in.createTypedArrayList(Medication.CREATOR);
-//        mCurrentUser = in.readParcelable(FirebaseUser.class.getClassLoader());
-//    }
-//
-//    public static final Creator<MedicationModel> CREATOR = new Creator<MedicationModel>() {
-//        @Override
-//        public MedicationModel createFromParcel(Parcel in) {
-//            return new MedicationModel(in);
-//        }
-//
-//        @Override
-//        public MedicationModel[] newArray(int size) {
-//            return new MedicationModel[size];
-//        }
-//    };
-//
-//    @Override
-//    public int describeContents() {
-//        return 0;
-//    }
-//
-//    @Override
-//    public void writeToParcel(Parcel dest, int flags) {
-//        dest.writeTypedList(mMedications);
-//        dest.writeParcelable(mCurrentUser, flags);
-//    }
-
     //************************//
     //****Class Functions*****//
     //************************//
@@ -91,25 +50,17 @@ public class MedicationModel implements Subject {
         return mMedications;
     }
 
-    public ArrayList<Observer> getObservers() {
-        return mObservers;
-    }
-
-    public void setFirestoreInstance() {
-        if (mDb == null) {
-            mDb = FirebaseFirestore.getInstance();
-        }
-    }
-
     public void addNewMedication(String name, String description, String adRoute) {
+        String newMedId = Integer.toString(mMedications.size());
+
         Map<String, Object> medication = new HashMap<>();
-        Medication med = new Medication(name, description, adRoute);
-        medication.put(Integer.toString(mMedications.size()), med);
+        Medication med = new Medication(newMedId, name, description, adRoute);
+        medication.put(newMedId, med);
 
         mDb.collection(mCurrentUser.getUid()).document(MEDICATION_DOC_NAME).
                 set(medication, SetOptions.merge())
                 .addOnSuccessListener(aVoid -> {
-                    mMedications.add(new Medication(name, description, adRoute));
+                    mMedications.add(new Medication(newMedId, name, description, adRoute));
                     notifyObservers();
                 });
     }
@@ -123,7 +74,11 @@ public class MedicationModel implements Subject {
                     if (documentSnapshot.exists()) {
                         Map<String, Object> medications = documentSnapshot.getData();
                         for (Object medication : medications.values()) {
-                            mMedications.add(stringToClass(medication.toString()));
+                            Medication med = stringToClass(medication.toString());
+
+                            if (med != null) {
+                                mMedications.add(med);
+                            }
                         }
 
                         notifyObservers();
@@ -143,11 +98,12 @@ public class MedicationModel implements Subject {
         }
 
         try {
-            String name = obj.getString(NAME_FIELD);
-            String description = obj.getString(DESCRIPTION_FIELD);
-            String administration = obj.getString(ADMINISTRATION_FIELD);
+            String id = obj != null ? obj.getString(ID_FIELD) : null;
+            String name = obj != null ? obj.getString(NAME_FIELD) : null;
+            String description = obj != null ? obj.getString(DESCRIPTION_FIELD) : null;
+            String administration = obj != null ? obj.getString(ADMINISTRATION_FIELD) : null;
 
-            return new Medication(name, description, administration);
+            return new Medication(id, name, description, administration);
         } catch (JSONException e) {
             e.printStackTrace();
         }
