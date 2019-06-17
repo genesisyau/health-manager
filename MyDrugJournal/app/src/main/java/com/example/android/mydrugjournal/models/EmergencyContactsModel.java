@@ -89,7 +89,7 @@ public class EmergencyContactsModel implements Subject {
         tmpContact.setId(newMedId);
 
         Map<String, Object> contacts = new HashMap<>();
-        contacts.put(Integer.toString(mContacts.size()), tmpContact);
+        contacts.put(newMedId, tmpContact);
 
         db.collection(mCurrentUser.getUid()).document(CONTACT_DOC_NAME).
                 set(contacts, SetOptions.merge())
