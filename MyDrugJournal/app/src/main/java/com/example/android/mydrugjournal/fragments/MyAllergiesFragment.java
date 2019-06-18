@@ -1,5 +1,7 @@
 package com.example.android.mydrugjournal.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.android.mydrugjournal.R;
 import com.example.android.mydrugjournal.activities.AddNewAllergyActivity;
@@ -60,9 +63,23 @@ public class MyAllergiesFragment extends Fragment implements Observer {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 String id = mModel.getAllergies().get(viewHolder.getAdapterPosition()).getId();
-                mModel.deleteAllergyById(id);
-                allergiesAdapter = new AllergiesRecyclerAdapter(mModel.getAllergies());
-                recyclerAllergies.setAdapter(allergiesAdapter);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage(getResources().getString(R.string.confirm_delete))
+                        .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
+                            mModel.deleteAllergyById(id);
+                            allergiesAdapter = new AllergiesRecyclerAdapter(mModel.getAllergies());
+                            recyclerAllergies.setAdapter(allergiesAdapter);
+                            Toast.makeText(getActivity(), "Deleted successfully", Toast.LENGTH_SHORT).show();
+                        })
+                        .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        allergiesAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                                        Toast.makeText(getActivity(), "Deletion cancelled", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                        ).show();
+//                recyclerAllergies.setAdapter(allergiesAdapter);
             }
         });
 

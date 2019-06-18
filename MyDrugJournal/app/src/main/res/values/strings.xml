@@ -91,6 +91,7 @@
     <string name="no">No</string>
     <string name="address">Address</string>
     <string name="phone_number">Phone number</string>
+    <string name="confirm_delete">Are you sure you want to delete it?</string>
     <string name="welcome">Welcome,</string>
     <string name="description">Description</string>
 </resources>
