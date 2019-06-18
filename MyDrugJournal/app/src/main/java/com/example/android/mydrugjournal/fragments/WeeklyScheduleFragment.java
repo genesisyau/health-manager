@@ -33,6 +33,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class WeeklyScheduleFragment extends Fragment implements Observer {
@@ -81,9 +83,9 @@ public class WeeklyScheduleFragment extends Fragment implements Observer {
             if (medication.getConsumptionDates() != null && medication.getConsumptionDates().size() > 0) {
                 for (Date date : medication.getConsumptionDates()) {
                     if (date.getYear() == event.getStartTime().get(Calendar.YEAR)
-                        && date.getMonth() == event.getStartTime().get(Calendar.MONTH)
-                        && date.getDay() == event.getStartTime().get(Calendar.DAY_OF_MONTH)
-                        && date.getHour() == event.getStartTime().get(Calendar.HOUR_OF_DAY)) {
+                            && date.getMonth() == event.getStartTime().get(Calendar.MONTH)
+                            && date.getDay() == event.getStartTime().get(Calendar.DAY_OF_MONTH)
+                            && date.getHour() == event.getStartTime().get(Calendar.HOUR_OF_DAY)) {
 
                         medications.add(medication);
                     }
@@ -104,42 +106,54 @@ public class WeeklyScheduleFragment extends Fragment implements Observer {
 
     public List<WeekViewEvent> getEvents(int newYear, int newMonth) {
         List<WeekViewEvent> events = new ArrayList<>();
+        HashMap<String, Integer> eventsPerDay = new LinkedHashMap<>();
 
         for (Medication medication : mModel.getMedications()) {
             if (medication.getConsumptionDates() != null) {
                 for (Date date : medication.getConsumptionDates()) {
                     if (newYear == date.getYear() && newMonth == date.getMonth()) {
-                        events.add(addNewEvent(date, medication.getId()));
-                        Log.i("MED DATE", medication.getName() + " " + date.getDay() + " " + date.getHour() + ":" + date.getMinute());
+                        if (eventsPerDay.get(date.getDay() + " " + date.getHour() + " " + date.getMinute()) == null) {
+                            eventsPerDay.put(date.getDay() + " " + date.getHour() + " " + date.getMinute(), 0);
+                        }
+                        int eventTimes = eventsPerDay.get(date.getDay() + " " + date.getHour() + " " + date.getMinute()) + 1;
+                        eventsPerDay.put(date.getDay() + " " + date.getHour() + " " + date.getMinute(), eventTimes);
                     }
                 }
             }
         }
 
+        for (String key : eventsPerDay.keySet()) {
+            String[] date = key.split(" ");
+            events.add(addNewEvent(newYear, newMonth, Integer.parseInt(date[0]),
+                    Integer.parseInt(date[1]), Integer.parseInt(date[2]), eventsPerDay.get(key)));
+
+            Log.i("EVENTS", key + ":" + eventsPerDay.get(key));
+        }
+
         return events;
     }
 
-    private WeekViewEvent addNewEvent(Date event, String medId) {
+    private WeekViewEvent addNewEvent(int year, int month, int day, int hour, int minutes, int medNumber) {
         // Initialize start and end time.
         Calendar now = Calendar.getInstance();
 
         Calendar eventTime = (Calendar) now.clone();
-        eventTime.set(Calendar.YEAR, event.getYear());
-        eventTime.set(Calendar.MONTH, event.getMonth());
-        eventTime.set(Calendar.DAY_OF_MONTH, event.getDay());
-        eventTime.set(Calendar.HOUR_OF_DAY, event.getHour());
-        eventTime.set(Calendar.MINUTE, event.getMinute());
+        eventTime.set(Calendar.YEAR, year);
+        eventTime.set(Calendar.MONTH, month);
+        eventTime.set(Calendar.DAY_OF_MONTH, day);
+        eventTime.set(Calendar.HOUR_OF_DAY, hour);
+        eventTime.set(Calendar.MINUTE, minutes);
 
         Calendar endTime = (Calendar) now.clone();
-        endTime.set(Calendar.YEAR, event.getYear());
-        endTime.set(Calendar.MONTH, event.getMonth());
-        endTime.set(Calendar.DAY_OF_MONTH, event.getDay());
-        endTime.set(Calendar.HOUR_OF_DAY, event.getHour() + 1);
-        endTime.set(Calendar.MINUTE, event.getMinute());
+        endTime.set(Calendar.YEAR, year);
+        endTime.set(Calendar.MONTH, month);
+        endTime.set(Calendar.DAY_OF_MONTH, day);
+        endTime.set(Calendar.HOUR_OF_DAY, hour + 1);
+        endTime.set(Calendar.MINUTE, minutes);
 
         // Create an week view event.
         WeekViewEvent weekViewEvent = new WeekViewEvent();
-        weekViewEvent.setName("Meds x1");
+        weekViewEvent.setName("Meds x" + medNumber);
         weekViewEvent.setStartTime(eventTime);
         weekViewEvent.setEndTime(endTime);
         weekViewEvent.setColor(Color.parseColor("#32CD32"));
