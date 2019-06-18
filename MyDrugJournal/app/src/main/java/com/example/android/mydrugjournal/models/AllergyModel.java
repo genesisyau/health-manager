@@ -1,13 +1,19 @@
 package com.example.android.mydrugjournal.models;
 
+import android.support.annotation.NonNull;
+import android.util.Log;
+
 import com.example.android.mydrugjournal.adapters.AllergiesRecyclerAdapter;
 import com.example.android.mydrugjournal.data.Allergy;
 import com.example.android.mydrugjournal.fragments.MyAllergiesFragment;
 import com.example.android.mydrugjournal.interfaces.Observer;
 import com.example.android.mydrugjournal.interfaces.Subject;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.google.gson.Gson;
@@ -27,7 +33,7 @@ public class AllergyModel implements Subject {
 
     private Allergy tmpAllergy;
 
-    private AllergyModel(){
+    private AllergyModel() {
         db = FirebaseFirestore.getInstance();
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         isFetched = false;
@@ -38,6 +44,7 @@ public class AllergyModel implements Subject {
     }
 
     private void loadAllergies() {
+        mAllergies.clear();
         String documentRoute = mCurrentUser.getUid() + "/" + CONTACT_DOC_NAME;
         DocumentReference docRef = db.document(documentRoute);
 
@@ -61,13 +68,16 @@ public class AllergyModel implements Subject {
                 .addOnFailureListener(e -> {
 
                 });
+
     }
 
     public static AllergyModel getInstance() {
         return instance;
     }
 
-    public ArrayList<Allergy> getAllergies(){ return mAllergies;}
+    public ArrayList<Allergy> getAllergies() {
+        return mAllergies;
+    }
 
     @Override
     public void register(Observer observer) {
@@ -91,6 +101,7 @@ public class AllergyModel implements Subject {
     }
 
     public void addNewAllergy() {
+        Log.d("removed", "size:" + Integer.toString(mAllergies.size()));
         String newId = mAllergies.size() + tmpAllergy.getAllergen();
         tmpAllergy.setId(newId);
 
@@ -108,5 +119,26 @@ public class AllergyModel implements Subject {
     public void setAllergyInfo(String name, String description) {
         tmpAllergy.setAllergen(name);
         tmpAllergy.setDescription(description);
+    }
+
+    public void deleteAllergyById(String id) {
+        String documentRoute = mCurrentUser.getUid() + "/" + CONTACT_DOC_NAME;
+        DocumentReference docRef = db.document(documentRoute);
+
+        // Remove the 'capital' field from the document
+        Map<String,Object> updates = new HashMap<>();
+        updates.put(id, FieldValue.delete());
+
+        docRef.update(updates).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d("delete", "DocumentSnapshot successfully deleted!");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("delete", "Error deleting document", e);
+            }
+        });
     }
 }
