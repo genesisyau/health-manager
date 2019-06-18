@@ -43,4 +43,10 @@ public class AddNewAllergyActivity extends AppCompatActivity {
         mModel.addNewAllergy();
         finish();
     };
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
 }

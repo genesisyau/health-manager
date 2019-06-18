@@ -79,6 +79,7 @@ public class EmergencyContactsModel implements Subject {
                 .addOnSuccessListener(aVoid -> {
                     mContacts.add(tmpContact);
                     notifyObservers();
+                    tmpContact = new EmergencyContact();
                 });
     }
 
@@ -127,6 +128,9 @@ public class EmergencyContactsModel implements Subject {
     }
 
     public void setContactInfo(String contactName, String contactAddress, String contactPhoneNumber) {
+        if (tmpContact== null) {
+            tmpContact = new EmergencyContact();
+        }
         tmpContact.setName(contactName);
         tmpContact.setAddress(contactAddress);
         tmpContact.setPhoneNumber(contactPhoneNumber);

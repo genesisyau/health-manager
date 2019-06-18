@@ -75,7 +75,6 @@ public class AllergiesRecyclerAdapter extends RecyclerView.Adapter<AllergiesRecy
             allergyName = view.findViewById(R.id.allergenName);
             allergyDescription = view.findViewById(R.id.allergenDescription);
 
-            //callContact.setOnClickListener(onContactCallClick);
         }
     }
 

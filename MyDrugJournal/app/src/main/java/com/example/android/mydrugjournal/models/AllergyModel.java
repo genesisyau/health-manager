@@ -101,7 +101,6 @@ public class AllergyModel implements Subject {
     }
 
     public void addNewAllergy() {
-        Log.d("removed", "size:" + Integer.toString(mAllergies.size()));
         String newId = mAllergies.size() + tmpAllergy.getAllergen();
         tmpAllergy.setId(newId);
 
@@ -113,10 +112,15 @@ public class AllergyModel implements Subject {
                 .addOnSuccessListener(aVoid -> {
                     mAllergies.add(tmpAllergy);
                     notifyObservers();
+                    tmpAllergy = new Allergy();
                 });
     }
 
     public void setAllergyInfo(String name, String description) {
+        if (tmpAllergy == null) {
+            tmpAllergy = new Allergy();
+        }
+
         tmpAllergy.setAllergen(name);
         tmpAllergy.setDescription(description);
     }
