@@ -81,6 +81,11 @@ public class EmergencyContactsFragment extends Fragment implements Observer, Eme
     }
 
     @Override
+    public void update(boolean add) {
+
+    }
+
+    @Override
     public void onContactCall(int position) {
         EmergencyContact contact = mModel.getContacts().get(position);
 

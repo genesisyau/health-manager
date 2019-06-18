@@ -99,4 +99,8 @@ public class MyAllergiesFragment extends Fragment implements Observer {
         progressBar.setVisibility(getView().GONE);
     }
 
+    @Override
+    public void update(boolean add) {
+
+    }
 }

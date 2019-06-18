@@ -69,4 +69,9 @@ public class MyMedicationsFragment extends Fragment implements Observer {
     public void update() {
         setRecyclerAdapter();
     }
+
+    @Override
+    public void update(boolean add) {
+
+    }
 }

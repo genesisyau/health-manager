@@ -15,6 +15,7 @@ public class Date {
     private int day;
     private int hour;
     private int minute;
+    private boolean isConsumed;
 
     public Date() {
         year = -1;
@@ -22,6 +23,7 @@ public class Date {
         hour = -1;
         minute = -1;
         day = -1;
+        isConsumed = false;
     }
 
     public Date(int year, int month, int day, int hour, int minute) {
@@ -30,6 +32,7 @@ public class Date {
         this.day = day;
         this.hour = hour;
         this.minute = minute;
+        isConsumed = false;
     }
 
     public void printDate() {
