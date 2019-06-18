@@ -28,6 +28,9 @@ public class EmergencyContactsRecyclerAdapter extends RecyclerView.Adapter<Emerg
         mContacts = myDataset;
         onContactCallClickListener = callListener;
     }
+    public EmergencyContactsRecyclerAdapter(ArrayList<EmergencyContact> myDataset) {
+        mContacts = myDataset;
+    }
 
     public void updateList(ArrayList<EmergencyContact> newList) {
         mContacts.clear();
