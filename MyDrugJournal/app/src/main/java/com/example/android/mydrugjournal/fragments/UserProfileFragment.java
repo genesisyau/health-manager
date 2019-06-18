@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -50,6 +51,7 @@ public class UserProfileFragment extends Fragment {
     private CountryCodePicker mCountry;
     private ImageView mProfilePic;
     private Button mEditBtn, mSaveBtn;
+    private ProgressBar progressBar;
 
     private String date;
 
@@ -69,6 +71,7 @@ public class UserProfileFragment extends Fragment {
         fbUser = mAuth.getCurrentUser();
         docRef = db.collection(fbUser.getUid()).document("profile");
 
+        progressBar = getView().findViewById(R.id.progressBar);
         mFirstName = getView().findViewById(R.id.firstNameInput);
         mLastName = getView().findViewById(R.id.lastNameInput);
         mBirthdate = getView().findViewById(R.id.birthdateInput);
@@ -83,7 +86,9 @@ public class UserProfileFragment extends Fragment {
         mEditBtn = getView().findViewById(R.id.editBtn);
         mSaveBtn = getView().findViewById(R.id.saveBtn);
 
+        showSpinner();
         RetrieveProfileData();
+        hideSpinner();
 
         mEditBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,8 +201,6 @@ public class UserProfileFragment extends Fragment {
                 }
             }
         });
-
-        //Log.d("fb", user.getFirstName());
     }
 
     private void setAge() {
@@ -230,5 +233,12 @@ public class UserProfileFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
 
+    public void showSpinner() {
+        progressBar.setVisibility(getView().VISIBLE);
+    }
+
+    public void hideSpinner() {
+        progressBar.setVisibility(getView().GONE);
+    }
 
 }
