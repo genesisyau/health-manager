@@ -128,7 +128,7 @@ public class AllergyModel implements Subject {
     public void deleteAllergyById(String id) {
         String documentRoute = mCurrentUser.getUid() + "/" + CONTACT_DOC_NAME;
         DocumentReference docRef = db.document(documentRoute);
-
+        Log.d("delete", id);
         // Remove the 'capital' field from the document
         Map<String,Object> updates = new HashMap<>();
         updates.put(id, FieldValue.delete());
@@ -144,5 +144,17 @@ public class AllergyModel implements Subject {
                 Log.w("delete", "Error deleting document", e);
             }
         });
+
+        removeById(id);
+    }
+
+    private void removeById(String id) {
+        for(int x = 0; x < mAllergies.size(); x++){
+            if (mAllergies.get(x).getId().equals(id)) {
+                mAllergies.remove(x);
+                Log.d("delete", "Successfully deleted!");
+                break;
+            }
+        }
     }
 }

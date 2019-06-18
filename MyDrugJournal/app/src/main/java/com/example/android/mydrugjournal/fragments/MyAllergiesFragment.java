@@ -57,7 +57,7 @@ public class MyAllergiesFragment extends Fragment implements Observer {
         mAddFab = getView().findViewById(R.id.addAllergyFab);
         mAddFab.setOnClickListener(onAddAllergyClicked);
 
-        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
                                   RecyclerView.ViewHolder target) {
@@ -66,12 +66,10 @@ public class MyAllergiesFragment extends Fragment implements Observer {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                Log.d("removed", mModel.getAllergies().get(viewHolder.getAdapterPosition()).getId());
-                Log.d("removed", viewHolder.toString());
-                Log.d("removed", Integer.toString(mModel.getAllergies().size()));
-                mModel.getAllergies().remove(viewHolder.getAdapterPosition());
-                mModel.deleteAllergyById(mModel.getAllergies().get(viewHolder.getAdapterPosition()).getId());
-                allergiesAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+                String id = mModel.getAllergies().get(viewHolder.getAdapterPosition()).getId();
+                mModel.deleteAllergyById(id);
+                allergiesAdapter = new AllergiesRecyclerAdapter(mModel.getAllergies());
+                recyclerAllergies.setAdapter(allergiesAdapter);
             }
         });
 
