@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,43 +31,32 @@ public class EmergencyContactsModel implements Subject {
     private FirebaseFirestore db;
     private FirebaseUser mCurrentUser;
 
-    private EmergencyContactsModel(){
+    private EmergencyContact tmpContact;
+
+    private boolean isFetched;
+
+    private EmergencyContactsModel() {
         db = FirebaseFirestore.getInstance();
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
-
+        isFetched = false;
         mContacts = new ArrayList<>();
         mObservers = new ArrayList<>();
+        tmpContact = new EmergencyContact();
         loadContacts();
+    }
+
+    public boolean getIsFetched() {
+        return isFetched;
     }
 
     public static EmergencyContactsModel getInstance() {
         return instance;
     }
 
-    private EmergencyContact stringToClass(String data) {
-        JSONObject obj = null;
-        try {
-            obj = new JSONObject(data);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            String name = obj.getString(NAME_FIELD);
-            String address = obj.getString(ADDRESS_FIELD);
-            String phoneNumber = obj.getString(PHONE_NUMBER_FIELD);
-
-            return new EmergencyContact(name, address, phoneNumber);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
     public ArrayList<EmergencyContact> getContacts() {
         return mContacts;
     }
+
     public ArrayList<Observer> getObservers() {
         return mObservers;
     }
@@ -77,15 +67,17 @@ public class EmergencyContactsModel implements Subject {
         }
     }
 
-    public void addNewEmergencyContact(String name, String address, String phoneNumber) {
+    public void addNewEmergencyContact() {
+        String newMedId = mContacts.size() + tmpContact.getName();
+        tmpContact.setId(newMedId);
+
         Map<String, Object> contacts = new HashMap<>();
-        EmergencyContact emergencyContact = new EmergencyContact(name, address, phoneNumber);
-        contacts.put(Integer.toString(mContacts.size()), emergencyContact);
+        contacts.put(newMedId, tmpContact);
 
         db.collection(mCurrentUser.getUid()).document(CONTACT_DOC_NAME).
-                set(emergencyContact, SetOptions.merge())
+                set(contacts, SetOptions.merge())
                 .addOnSuccessListener(aVoid -> {
-                    mContacts.add(new EmergencyContact(name, address, phoneNumber));
+                    mContacts.add(tmpContact);
                     notifyObservers();
                 });
     }
@@ -115,15 +107,28 @@ public class EmergencyContactsModel implements Subject {
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                         Map<String, Object> contacts = documentSnapshot.getData();
-                        for (Object medication : contacts.values()) {
-                            mContacts.add(stringToClass(medication.toString()));
+                        for (Object contact : contacts.values()) {
+                            String json = new Gson().toJson(contact);
+                            EmergencyContact emergencyContact = new Gson().fromJson(json, EmergencyContact.class);
+
+                            if (contact != null) {
+                                mContacts.add(emergencyContact);
+                            }
                         }
 
                         notifyObservers();
+                        isFetched = true;
                     }
                 })
                 .addOnFailureListener(e -> {
 
                 });
+
+    }
+
+    public void setContactInfo(String contactName, String contactAddress, String contactPhoneNumber) {
+        tmpContact.setName(contactName);
+        tmpContact.setAddress(contactAddress);
+        tmpContact.setPhoneNumber(contactPhoneNumber);
     }
 }
