@@ -16,18 +16,25 @@ import android.widget.Toast;
 import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
+import com.alamkanak.weekview.WeekViewLoader;
 import com.example.android.mydrugjournal.R;
+import com.example.android.mydrugjournal.data.Date;
+import com.example.android.mydrugjournal.data.Medication;
+import com.example.android.mydrugjournal.interfaces.Observer;
+import com.example.android.mydrugjournal.models.MedicationModel;
 import com.hbb20.CountryCodePicker;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
-public class WeeklyScheduleFragment extends Fragment {
+public class WeeklyScheduleFragment extends Fragment implements Observer {
     private WeekView mWeekView;
+
+    private MedicationModel mModel;
 
     @Nullable
     @Override
@@ -38,6 +45,9 @@ public class WeeklyScheduleFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        mModel = MedicationModel.getInstance();
+        mModel.register(this);
 
         mWeekView = getView().findViewById(R.id.week_view);
 
@@ -54,9 +64,8 @@ public class WeeklyScheduleFragment extends Fragment {
 
     MonthLoader.MonthChangeListener mMonthChangeListener = (newYear, newMonth) -> {
         // Populate the week view with some events.
-        List<WeekViewEvent> events = getEvents(newYear, newMonth);
-        Log.d("EVENT LENGTH", Integer.toString(events.size()));
-        return events;
+        Log.i("EVENT", "event");
+        return getEvents(newYear, newMonth);
     };
 
     WeekView.EventClickListener mEventClickListener = (event, eventRect) -> {
@@ -70,33 +79,51 @@ public class WeeklyScheduleFragment extends Fragment {
     public List<WeekViewEvent> getEvents(int newYear, int newMonth) {
         List<WeekViewEvent> events = new ArrayList<>();
 
+        for (Medication medication : mModel.getMedications()) {
+            if (medication.getConsumptionDates() != null) {
+                for (Date date : medication.getConsumptionDates()) {
+                    if (newYear == date.getYear() && newMonth == date.getMonth()) {
+                        events.add(addNewEvent(date, medication.getId()));
+                        Log.i("MED DATE", medication.getName() + " " + date.getDay() + " " + date.getHour() + ":" + date.getMinute());
+                    }
+                }
+            }
+        }
+
+        return events;
+    }
+
+    private WeekViewEvent addNewEvent(Date event, String medId) {
         // Initialize start and end time.
         Calendar now = Calendar.getInstance();
+
         Calendar eventTime = (Calendar) now.clone();
-        eventTime.set(Calendar.YEAR, newYear);
-        eventTime.set(Calendar.MONTH, newMonth);
-        eventTime.set(Calendar.DAY_OF_MONTH, 10);
-        eventTime.set(Calendar.HOUR_OF_DAY, 12);
-        eventTime.set(Calendar.MINUTE, 0);
-        Log.d("TIME", Long.toString(eventTime.getTimeInMillis()));
+        eventTime.set(Calendar.YEAR, event.getYear());
+        eventTime.set(Calendar.MONTH, event.getMonth());
+        eventTime.set(Calendar.DAY_OF_MONTH, event.getDay());
+        eventTime.set(Calendar.HOUR_OF_DAY, event.getHour());
+        eventTime.set(Calendar.MINUTE, event.getMinute());
 
         Calendar endTime = (Calendar) now.clone();
-        endTime.set(Calendar.YEAR, newYear);
-        endTime.set(Calendar.MONTH, newMonth);
-        endTime.set(Calendar.DAY_OF_MONTH, 10);
-        endTime.set(Calendar.HOUR_OF_DAY, 13);
-        endTime.set(Calendar.MINUTE, 0);
+        endTime.set(Calendar.YEAR, event.getYear());
+        endTime.set(Calendar.MONTH, event.getMonth());
+        endTime.set(Calendar.DAY_OF_MONTH, event.getDay());
+        endTime.set(Calendar.HOUR_OF_DAY, event.getHour() + 1);
+        endTime.set(Calendar.MINUTE, event.getMinute());
 
         // Create an week view event.
         WeekViewEvent weekViewEvent = new WeekViewEvent();
-        weekViewEvent.setId(12345);
-        weekViewEvent.setName("Pill 1");
+//        weekViewEvent.setId(Integer.parseInt(medId + event.getDay()));
+        weekViewEvent.setName("Meds x1");
         weekViewEvent.setStartTime(eventTime);
         weekViewEvent.setEndTime(endTime);
         weekViewEvent.setColor(Color.parseColor("#32CD32"));
 
-        events.add(weekViewEvent);
-        return events;
+        return weekViewEvent;
     }
 
+    @Override
+    public void update() {
+        mWeekView.notifyDatasetChanged();
+    }
 }

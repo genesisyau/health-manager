@@ -13,7 +13,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Medication implements Parcelable {
+public class Medication {
     private String id;
     private String name;
     private String description;
@@ -35,12 +35,6 @@ public class Medication implements Parcelable {
         this.consumptionDates = dates;
     }
 
-    protected Medication(Parcel in) {
-        name = in.readString();
-        description = in.readString();
-        administration = in.readString();
-    }
-
     public void setConsumptionDates(ArrayList<Date> dates) {
         if (consumptionDates == null || consumptionDates.size() == 0) {
             consumptionDates = dates;
@@ -48,29 +42,5 @@ public class Medication implements Parcelable {
         else {
             consumptionDates.addAll(dates);
         }
-    }
-
-    public static final Creator<Medication> CREATOR = new Creator<Medication>() {
-        @Override
-        public Medication createFromParcel(Parcel in) {
-            return new Medication(in);
-        }
-
-        @Override
-        public Medication[] newArray(int size) {
-            return new Medication[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(name);
-        parcel.writeString(description);
-        parcel.writeString(administration);
     }
 }

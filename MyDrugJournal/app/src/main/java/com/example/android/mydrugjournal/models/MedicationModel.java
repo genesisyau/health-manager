@@ -17,6 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,17 +28,13 @@ public class MedicationModel implements Subject {
     private static final MedicationModel instance = new MedicationModel();
 
     private final String MEDICATION_DOC_NAME = "meds";
-    private final String ID_FIELD = "id";
-    private final String NAME_FIELD = "name";
-    private final String DESCRIPTION_FIELD = "description";
-    private final String ADMINISTRATION_FIELD = "administration";
-    private final String DATE_FIELD = "consumptionDates";
 
     private ArrayList<Medication> mMedications;
     private ArrayList<Observer> mObservers;
     private FirebaseFirestore mDb;
     private FirebaseUser mCurrentUser;
 
+    private HashMap<String, Integer> dayHashMap;
     private Medication mTempMedication;
 
     private MedicationModel() {
@@ -47,6 +44,7 @@ public class MedicationModel implements Subject {
         mMedications = new ArrayList<>();
         mObservers = new ArrayList<>();
         mTempMedication = new Medication();
+        setDayHashMap();
         loadMedications();
     }
 
@@ -109,7 +107,19 @@ public class MedicationModel implements Subject {
 
         ArrayList<Date> dates = new ArrayList<>();
         for (int n = 0; n < days.size(); n++) {
-            dates.add(new Date(days.get(n).toString(), hour + ":" + minutes));
+            Calendar now = Calendar.getInstance();
+            int year = now.get(Calendar.YEAR);
+            int month = now.get(Calendar.MONTH);
+            int day = dayHashMap.get(days.get(n).toString());
+
+            while (now.get(Calendar.DAY_OF_WEEK) != day) {
+                now.add(Calendar.DATE, 1);
+            }
+
+            String[] splitDate = now.getTime().toString().split(" ");
+
+            dates.add(new Date(year, month, Integer.parseInt(splitDate[2]), Integer.parseInt(hour), Integer.parseInt(minutes)));
+            dates.get(n).printDate();
         }
 
         mTempMedication.setConsumptionDates(dates);
@@ -119,6 +129,17 @@ public class MedicationModel implements Subject {
         mTempMedication.setName(medName);
         mTempMedication.setDescription(medDesc);
         mTempMedication.setAdministration(medAdmin);
+    }
+
+    public void setDayHashMap() {
+        dayHashMap = new HashMap<>();
+        dayHashMap.put("SUNDAY", Calendar.SUNDAY);
+        dayHashMap.put("MONDAY", Calendar.MONDAY);
+        dayHashMap.put("TUESDAY", Calendar.TUESDAY);
+        dayHashMap.put("WEDNESDAY", Calendar.WEDNESDAY);
+        dayHashMap.put("THURSDAY", Calendar.THURSDAY);
+        dayHashMap.put("FRIDAY", Calendar.FRIDAY);
+        dayHashMap.put("SATURDAY", Calendar.SATURDAY);
     }
 
     //***************************//
