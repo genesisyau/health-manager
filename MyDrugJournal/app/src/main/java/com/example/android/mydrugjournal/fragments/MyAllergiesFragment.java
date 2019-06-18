@@ -1,16 +1,32 @@
 package com.example.android.mydrugjournal.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.example.android.mydrugjournal.R;
+import com.example.android.mydrugjournal.activities.AddNewAllergyActivity;
+import com.example.android.mydrugjournal.adapters.AllergiesRecyclerAdapter;
+import com.example.android.mydrugjournal.data.Allergy;
+import com.example.android.mydrugjournal.interfaces.Observer;
+import com.example.android.mydrugjournal.models.AllergyModel;
 
-public class MyAllergiesFragment extends Fragment {
+public class MyAllergiesFragment extends Fragment implements Observer {
+
+    private FloatingActionButton mAddFab;
+    private ProgressBar progressBar;
+    private RecyclerView recyclerAllergies;
+    private AllergiesRecyclerAdapter allergiesAdapter;
+    private AllergyModel mModel;
 
     @Nullable
     @Override
@@ -21,5 +37,43 @@ public class MyAllergiesFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        progressBar = getView().findViewById(R.id.progressBar);
+        progressBar.setVisibility(getView().VISIBLE);
+        mModel = AllergyModel.getInstance();
+        mModel.register(this);
+
+        if (mModel.getIsFetched()) {
+            progressBar.setVisibility(getView().GONE);
+        } else {
+            progressBar.setVisibility(getView().VISIBLE);
+        }
+
+        recyclerAllergies = getView().findViewById(R.id.allergiesRecyclerView);
+        recyclerAllergies.setLayoutManager(new LinearLayoutManager(getActivity()));
+        allergiesAdapter = new AllergiesRecyclerAdapter(mModel.getAllergies());
+        recyclerAllergies.setAdapter(allergiesAdapter);
+
+        mAddFab = getView().findViewById(R.id.addAllergyFab);
+        mAddFab.setOnClickListener(onAddAllergyClicked);
+    }
+
+    private View.OnClickListener onAddAllergyClicked = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(getContext(), AddNewAllergyActivity.class);
+            startActivity(intent);
+        }
+    };
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void update() {
+        allergiesAdapter = new AllergiesRecyclerAdapter(mModel.getAllergies());
+        recyclerAllergies.setAdapter(allergiesAdapter);
+        progressBar.setVisibility(getView().GONE);
     }
 }
