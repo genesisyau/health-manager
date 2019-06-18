@@ -46,12 +46,6 @@ public class EmergencyContactsFragment extends Fragment implements Observer, Eme
         mModel = EmergencyContactsModel.getInstance();
         mModel.register(this);
 
-        if (mModel.getIsFetched()) {
-            progressBar.setVisibility(getView().GONE);
-        } else {
-            progressBar.setVisibility(getView().VISIBLE);
-        }
-
         recyclerContacts = getView().findViewById(R.id.emergencyContactsRecyclerView);
         recyclerContacts.setLayoutManager(new LinearLayoutManager(getActivity()));
         contactsAdapter = new EmergencyContactsRecyclerAdapter(mModel.getContacts(), this);
@@ -90,13 +84,14 @@ public class EmergencyContactsFragment extends Fragment implements Observer, Eme
     @Override
     public void onResume() {
         super.onResume();
+        showSpinner();
     }
 
     @Override
     public void update() {
         contactsAdapter = new EmergencyContactsRecyclerAdapter(mModel.getContacts(), this);
         recyclerContacts.setAdapter(contactsAdapter);
-        progressBar.setVisibility(getView().GONE);
+        hideSpinner();
     }
 
     @Override
@@ -118,5 +113,13 @@ public class EmergencyContactsFragment extends Fragment implements Observer, Eme
                 .setNegativeButton(getString(R.string.no), (dialog, which) ->
                         Toast.makeText(getActivity(), "Call cancelled", Toast.LENGTH_SHORT).show()
                 ).show();
+    }
+
+    public void showSpinner() {
+        progressBar.setVisibility(getView().VISIBLE);
+    }
+
+    public void hideSpinner() {
+        progressBar.setVisibility(getView().GONE);
     }
 }

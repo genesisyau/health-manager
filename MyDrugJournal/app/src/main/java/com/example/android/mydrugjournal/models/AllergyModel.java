@@ -3,9 +3,7 @@ package com.example.android.mydrugjournal.models;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.example.android.mydrugjournal.adapters.AllergiesRecyclerAdapter;
 import com.example.android.mydrugjournal.data.Allergy;
-import com.example.android.mydrugjournal.fragments.MyAllergiesFragment;
 import com.example.android.mydrugjournal.interfaces.Observer;
 import com.example.android.mydrugjournal.interfaces.Subject;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -25,7 +23,6 @@ import java.util.Map;
 public class AllergyModel implements Subject {
     private static final AllergyModel instance = new AllergyModel();
     private final String CONTACT_DOC_NAME = "allergies";
-    private boolean isFetched;
     private ArrayList<Allergy> mAllergies;
     private ArrayList<Observer> mObservers;
     private FirebaseFirestore db;
@@ -36,7 +33,6 @@ public class AllergyModel implements Subject {
     private AllergyModel() {
         db = FirebaseFirestore.getInstance();
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
-        isFetched = false;
         mAllergies = new ArrayList<>();
         mObservers = new ArrayList<>();
         tmpAllergy = new Allergy();
@@ -44,7 +40,6 @@ public class AllergyModel implements Subject {
     }
 
     private void loadAllergies() {
-        isFetched = false;
         mAllergies.clear();
         String documentRoute = mCurrentUser.getUid() + "/" + CONTACT_DOC_NAME;
         DocumentReference docRef = db.document(documentRoute);
@@ -63,7 +58,6 @@ public class AllergyModel implements Subject {
                         }
 
                         notifyObservers();
-                        isFetched = true;
                     }
                 })
                 .addOnFailureListener(e -> {
@@ -92,15 +86,9 @@ public class AllergyModel implements Subject {
 
     @Override
     public void notifyObservers() {
-        isFetched = false;
         for (Observer observer : mObservers) {
             observer.update();
         }
-        isFetched = true;
-    }
-
-    public boolean getIsFetched() {
-        return isFetched;
     }
 
     public void addNewAllergy() {

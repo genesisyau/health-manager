@@ -16,9 +16,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.google.gson.Gson;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,20 +34,13 @@ public class EmergencyContactsModel implements Subject {
 
     private EmergencyContact tmpContact;
 
-    private boolean isFetched;
-
     private EmergencyContactsModel() {
         db = FirebaseFirestore.getInstance();
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
-        isFetched = false;
         mContacts = new ArrayList<>();
         mObservers = new ArrayList<>();
         tmpContact = new EmergencyContact();
         loadContacts();
-    }
-
-    public boolean getIsFetched() {
-        return isFetched;
     }
 
     public static EmergencyContactsModel getInstance() {
@@ -122,7 +112,6 @@ public class EmergencyContactsModel implements Subject {
                         }
 
                         notifyObservers();
-                        isFetched = true;
                     }
                 })
                 .addOnFailureListener(e -> {
