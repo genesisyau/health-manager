@@ -126,6 +126,10 @@ public class MedicationModel implements Subject {
     }
 
     public void setMedicationInfo(String medName, String medDesc, String medAdmin) {
+        if (mTempMedication == null) {
+            mTempMedication = new Medication();
+        }
+
         mTempMedication.setName(medName);
         mTempMedication.setDescription(medDesc);
         mTempMedication.setAdministration(medAdmin);
@@ -159,6 +163,7 @@ public class MedicationModel implements Subject {
     public void notifyObservers() {
         for (Observer observer : mObservers) {
             observer.update();
+            observer.update(true);
         }
     }
 }

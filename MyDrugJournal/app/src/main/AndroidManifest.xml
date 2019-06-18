@@ -46,6 +46,11 @@
             android:name=".activities.AddNewAllergyActivity"
             android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <receiver
+            android:name=".receivers.AlertReceiver"
+            android:enabled="true"
+            android:exported="false">
+        </receiver>
     </application>
 
 </manifest>

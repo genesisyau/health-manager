@@ -126,4 +126,9 @@ public class WeeklyScheduleFragment extends Fragment implements Observer {
     public void update() {
         mWeekView.notifyDatasetChanged();
     }
+
+    @Override
+    public void update(boolean add) {
+
+    }
 }

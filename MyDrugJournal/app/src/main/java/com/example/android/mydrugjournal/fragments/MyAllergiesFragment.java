@@ -76,4 +76,9 @@ public class MyAllergiesFragment extends Fragment implements Observer {
         recyclerAllergies.setAdapter(allergiesAdapter);
         progressBar.setVisibility(getView().GONE);
     }
+
+    @Override
+    public void update(boolean add) {
+
+    }
 }
