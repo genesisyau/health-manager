@@ -44,6 +44,7 @@ public class AllergyModel implements Subject {
     }
 
     private void loadAllergies() {
+        isFetched = false;
         mAllergies.clear();
         String documentRoute = mCurrentUser.getUid() + "/" + CONTACT_DOC_NAME;
         DocumentReference docRef = db.document(documentRoute);
@@ -91,9 +92,11 @@ public class AllergyModel implements Subject {
 
     @Override
     public void notifyObservers() {
+        isFetched = false;
         for (Observer observer : mObservers) {
             observer.update();
         }
+        isFetched = true;
     }
 
     public boolean getIsFetched() {

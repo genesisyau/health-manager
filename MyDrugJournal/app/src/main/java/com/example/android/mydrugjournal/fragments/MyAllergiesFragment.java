@@ -39,15 +39,8 @@ public class MyAllergiesFragment extends Fragment implements Observer {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         progressBar = getView().findViewById(R.id.progressBar);
-        progressBar.setVisibility(getView().VISIBLE);
         mModel = AllergyModel.getInstance();
         mModel.register(this);
-
-        if (mModel.getIsFetched()) {
-            progressBar.setVisibility(getView().GONE);
-        } else {
-            progressBar.setVisibility(getView().VISIBLE);
-        }
 
         recyclerAllergies = getView().findViewById(R.id.allergiesRecyclerView);
         recyclerAllergies.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -84,9 +77,18 @@ public class MyAllergiesFragment extends Fragment implements Observer {
         }
     };
 
+    public void showSpinner() {
+        progressBar.setVisibility(getView().VISIBLE);
+    }
+
+    public void hideSpinner() {
+        progressBar.setVisibility(getView().GONE);
+    }
+
     @Override
     public void onResume() {
         super.onResume();
+        showSpinner();
     }
 
     @Override
@@ -94,7 +96,7 @@ public class MyAllergiesFragment extends Fragment implements Observer {
         allergiesAdapter = new AllergiesRecyclerAdapter(mModel.getAllergies());
         recyclerAllergies.setAdapter(allergiesAdapter);
         allergiesAdapter.notifyDataSetChanged();
-        progressBar.setVisibility(getView().GONE);
+        hideSpinner();
     }
 
     @Override
