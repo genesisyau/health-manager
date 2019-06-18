@@ -1,8 +1,10 @@
 package com.example.android.mydrugjournal.fragments;
 
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.RectF;
+import android.media.RemoteController;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,12 +20,14 @@ import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
 import com.alamkanak.weekview.WeekViewLoader;
 import com.example.android.mydrugjournal.R;
+import com.example.android.mydrugjournal.activities.DateMedicationsActivity;
 import com.example.android.mydrugjournal.data.Date;
 import com.example.android.mydrugjournal.data.Medication;
 import com.example.android.mydrugjournal.interfaces.Observer;
 import com.example.android.mydrugjournal.models.MedicationModel;
 import com.hbb20.CountryCodePicker;
 
+import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -32,6 +36,8 @@ import java.util.Calendar;
 import java.util.List;
 
 public class WeeklyScheduleFragment extends Fragment implements Observer {
+    private final static String MEDICATIONS_KEY = "MEDKEY";
+
     private WeekView mWeekView;
 
     private MedicationModel mModel;
@@ -69,7 +75,27 @@ public class WeeklyScheduleFragment extends Fragment implements Observer {
     };
 
     WeekView.EventClickListener mEventClickListener = (event, eventRect) -> {
+        ArrayList<Medication> medications = new ArrayList<>();
 
+        for (Medication medication : mModel.getMedications()) {
+            if (medication.getConsumptionDates() != null && medication.getConsumptionDates().size() > 0) {
+                for (Date date : medication.getConsumptionDates()) {
+                    if (date.getYear() == event.getStartTime().get(Calendar.YEAR)
+                        && date.getMonth() == event.getStartTime().get(Calendar.MONTH)
+                        && date.getDay() == event.getStartTime().get(Calendar.DAY_OF_MONTH)
+                        && date.getHour() == event.getStartTime().get(Calendar.HOUR_OF_DAY)) {
+
+                        medications.add(medication);
+                    }
+                }
+            }
+        }
+
+        Intent intent = new Intent(getActivity(), DateMedicationsActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(MEDICATIONS_KEY, medications);
+        intent.putExtras(bundle);
+        startActivity(intent);
     };
 
     WeekView.EventLongPressListener mEventLongPressListener = (event, eventRect) -> {
@@ -113,7 +139,6 @@ public class WeeklyScheduleFragment extends Fragment implements Observer {
 
         // Create an week view event.
         WeekViewEvent weekViewEvent = new WeekViewEvent();
-//        weekViewEvent.setId(Integer.parseInt(medId + event.getDay()));
         weekViewEvent.setName("Meds x1");
         weekViewEvent.setStartTime(eventTime);
         weekViewEvent.setEndTime(endTime);

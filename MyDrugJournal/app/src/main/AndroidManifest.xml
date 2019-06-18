@@ -9,10 +9,14 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activities.DateMedicationsActivity"
+            android:label="Medications For This Day"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".activities.MainActivity"/>
         <activity
             android:name=".activities.AddToCalendarActivity"
             android:label="Select Date and Time"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.AddNewEmergencyContactActivity"
             android:parentActivityName=".activities.MainActivity"
@@ -46,11 +50,11 @@
             android:name=".activities.AddNewAllergyActivity"
             android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <receiver
             android:name=".receivers.AlertReceiver"
             android:enabled="true"
-            android:exported="false">
-        </receiver>
+            android:exported="false"></receiver>
     </application>
 
 </manifest>
