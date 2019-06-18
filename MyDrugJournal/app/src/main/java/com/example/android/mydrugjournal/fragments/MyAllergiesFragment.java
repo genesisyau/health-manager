@@ -8,6 +8,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +18,6 @@ import android.widget.ProgressBar;
 import com.example.android.mydrugjournal.R;
 import com.example.android.mydrugjournal.activities.AddNewAllergyActivity;
 import com.example.android.mydrugjournal.adapters.AllergiesRecyclerAdapter;
-import com.example.android.mydrugjournal.data.Allergy;
 import com.example.android.mydrugjournal.interfaces.Observer;
 import com.example.android.mydrugjournal.models.AllergyModel;
 
@@ -55,6 +56,24 @@ public class MyAllergiesFragment extends Fragment implements Observer {
 
         mAddFab = getView().findViewById(R.id.addAllergyFab);
         mAddFab.setOnClickListener(onAddAllergyClicked);
+
+        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                                  RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                String id = mModel.getAllergies().get(viewHolder.getAdapterPosition()).getId();
+                mModel.deleteAllergyById(id);
+                allergiesAdapter = new AllergiesRecyclerAdapter(mModel.getAllergies());
+                recyclerAllergies.setAdapter(allergiesAdapter);
+            }
+        });
+
+        helper.attachToRecyclerView(recyclerAllergies);
     }
 
     private View.OnClickListener onAddAllergyClicked = new View.OnClickListener() {
@@ -74,6 +93,7 @@ public class MyAllergiesFragment extends Fragment implements Observer {
     public void update() {
         allergiesAdapter = new AllergiesRecyclerAdapter(mModel.getAllergies());
         recyclerAllergies.setAdapter(allergiesAdapter);
+        allergiesAdapter.notifyDataSetChanged();
         progressBar.setVisibility(getView().GONE);
     }
 

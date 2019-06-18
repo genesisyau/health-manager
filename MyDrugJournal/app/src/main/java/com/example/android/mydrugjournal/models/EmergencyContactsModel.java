@@ -1,13 +1,17 @@
 package com.example.android.mydrugjournal.models;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.example.android.mydrugjournal.data.EmergencyContact;
 import com.example.android.mydrugjournal.interfaces.Observer;
 import com.example.android.mydrugjournal.interfaces.Subject;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.google.gson.Gson;
@@ -79,6 +83,7 @@ public class EmergencyContactsModel implements Subject {
                 .addOnSuccessListener(aVoid -> {
                     mContacts.add(tmpContact);
                     notifyObservers();
+                    tmpContact = new EmergencyContact();
                 });
     }
 
@@ -127,8 +132,44 @@ public class EmergencyContactsModel implements Subject {
     }
 
     public void setContactInfo(String contactName, String contactAddress, String contactPhoneNumber) {
+        if (tmpContact== null) {
+            tmpContact = new EmergencyContact();
+        }
         tmpContact.setName(contactName);
         tmpContact.setAddress(contactAddress);
         tmpContact.setPhoneNumber(contactPhoneNumber);
+    }
+
+    public void deleteContactById(String id) {
+        String documentRoute = mCurrentUser.getUid() + "/" + CONTACT_DOC_NAME;
+        DocumentReference docRef = db.document(documentRoute);
+        Log.d("delete", id);
+        // Remove the 'capital' field from the document
+        Map<String,Object> updates = new HashMap<>();
+        updates.put(id, FieldValue.delete());
+
+        docRef.update(updates).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d("delete", "DocumentSnapshot successfully deleted!");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("delete", "Error deleting document", e);
+            }
+        });
+
+        removeById(id);
+    }
+
+    private void removeById(String id) {
+        for(int x = 0; x < mContacts.size(); x++){
+            if (mContacts.get(x).getId().equals(id)) {
+                mContacts.remove(x);
+                Log.d("delete", "Successfully deleted!");
+                break;
+            }
+        }
     }
 }

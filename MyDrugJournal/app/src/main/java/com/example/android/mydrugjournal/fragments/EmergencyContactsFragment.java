@@ -10,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,6 +59,24 @@ public class EmergencyContactsFragment extends Fragment implements Observer, Eme
 
         mAddFab = getView().findViewById(R.id.addContactFab);
         mAddFab.setOnClickListener(onAddContactClicked);
+
+        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                                  RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                String id = mModel.getContacts().get(viewHolder.getAdapterPosition()).getId();
+                mModel.deleteContactById(id);
+                contactsAdapter = new EmergencyContactsRecyclerAdapter(mModel.getContacts());
+                recyclerContacts.setAdapter(contactsAdapter);
+            }
+        });
+
+        helper.attachToRecyclerView(recyclerContacts);
     }
 
     private View.OnClickListener onAddContactClicked = new View.OnClickListener() {

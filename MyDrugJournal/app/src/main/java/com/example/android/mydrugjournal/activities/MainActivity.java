@@ -10,12 +10,15 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.mydrugjournal.R;
 import com.example.android.mydrugjournal.fragments.AboutFragment;
@@ -195,36 +198,5 @@ public class MainActivity extends AppCompatActivity
         return ageInt;
 
     }
-
-
-
-//    private void test() {
-//        FirebaseUser user = mAuth.getCurrentUser();
-//        DocumentReference ref = db.collection(user.getUid()).document("allergies");
-//
-//        ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    DocumentSnapshot document = task.getResult();
-//                    if (document.exists()) {
-//                        Map<String, Object> tmp = new HashMap<>();
-//                        tmp = document.getData();
-//
-//                        for (Map.Entry<String, Object> entry : tmp.entrySet()) {
-//                            Log.d("allergy", entry.getKey() + ":" + entry.getValue().toString());
-//                        }
-//
-//                    } else {
-//                        Log.d("fb", "No such document");
-//                    }
-//                } else {
-//                    Log.d("fb", "get failed with ", task.getException());
-//                }
-//            }
-//        });
-//
-//    }
-
 }
 

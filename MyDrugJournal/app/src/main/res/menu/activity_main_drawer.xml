@@ -30,10 +30,6 @@
 
     <item android:title="More">
         <menu>
-            <item
-                android:id="@+id/nav_preferences"
-                android:icon="@drawable/ic_settings"
-                android:title="@string/preferences" />
 
             <item
                 android:id="@+id/nav_about_and_feedback"

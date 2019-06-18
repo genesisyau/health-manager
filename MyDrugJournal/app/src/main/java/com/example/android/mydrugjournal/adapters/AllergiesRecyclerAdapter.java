@@ -2,10 +2,13 @@ package com.example.android.mydrugjournal.adapters;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.mydrugjournal.R;
 import com.example.android.mydrugjournal.data.Allergy;
@@ -72,14 +75,16 @@ public class AllergiesRecyclerAdapter extends RecyclerView.Adapter<AllergiesRecy
             allergyName = view.findViewById(R.id.allergenName);
             allergyDescription = view.findViewById(R.id.allergenDescription);
 
-            //callContact.setOnClickListener(onContactCallClick);
         }
+    }
 
-//        private View.OnClickListener onContactCallClick = new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                onContactCallClickListener.onContactCall(getAdapterPosition());
-//            }
-//        };
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 }
