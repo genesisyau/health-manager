@@ -127,7 +127,7 @@ public class WeeklyScheduleFragment extends Fragment implements Observer {
         for (String key : eventsPerDay.keySet()) {
             String[] date = key.split(" ");
             events.add(addNewEvent(newYear, newMonth, Integer.parseInt(date[0]),
-                    Integer.parseInt(date[1]), Integer.parseInt(date[2]), eventsPerDay.get(key)));
+                    Integer.parseInt(date[1]), Integer.parseInt(date[2]), eventsPerDay.get(key), 0));
 
             Log.i("EVENTS", key + ":" + eventsPerDay.get(key));
         }
@@ -135,20 +135,11 @@ public class WeeklyScheduleFragment extends Fragment implements Observer {
         return events;
     }
 
-    private WeekViewEvent addNewEvent(int year, int month, int day, int hour, int minutes, int medNumber) {
+    private WeekViewEvent addNewEvent(int year, int month, int day, int hour, int minutes, int medNumber, int weeksPlus) {
         // Initialize start and end time.
+        String colorCode = "#32CD32";
         boolean isInPast = false;
-        String date = day + "/" + (month + 1) % 12 + "/" + year + " " + hour + ":" + minutes;
-        try {
-            if (new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(date).before(new java.util.Date())) {
-                Log.i("DATE", "PAST: " + date);
-                isInPast = true;
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        String colorCode = (isInPast == true) ? "#AEB6BF" : "#32CD32";
+        boolean isInPresent = false;
 
         Calendar now = Calendar.getInstance();
 
@@ -158,6 +149,7 @@ public class WeeklyScheduleFragment extends Fragment implements Observer {
         eventTime.set(Calendar.DAY_OF_MONTH, day);
         eventTime.set(Calendar.HOUR_OF_DAY, hour);
         eventTime.set(Calendar.MINUTE, minutes);
+        eventTime.add(Calendar.WEEK_OF_YEAR, weeksPlus);
 
         Calendar endTime = (Calendar) now.clone();
         endTime.set(Calendar.YEAR, year);
@@ -165,6 +157,34 @@ public class WeeklyScheduleFragment extends Fragment implements Observer {
         endTime.set(Calendar.DAY_OF_MONTH, day);
         endTime.set(Calendar.HOUR_OF_DAY, hour + 1);
         endTime.set(Calendar.MINUTE, minutes);
+        endTime.add(Calendar.WEEK_OF_YEAR, weeksPlus);
+
+        String date = eventTime.get(Calendar.DAY_OF_MONTH) + "/" + (month + 1) % 12 + "/" + year + " " + hour + ":" + minutes;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        String formattedDate = dateFormat.format(eventTime.getTime());
+        Log.i("FORMATTED", formattedDate);
+        try {
+            if (dateFormat.parse(dateFormat.format(endTime.getTime())).before(new java.util.Date())) {
+                Log.i("DATE", "PAST: " + date);
+                isInPast = true;
+            }
+
+            if (dateFormat.parse(dateFormat.format(eventTime.getTime())).before(new java.util.Date())
+                && dateFormat.parse(dateFormat.format(endTime.getTime())).after(new java.util.Date())) {
+                Log.i("DATE", "PRESENT: " + date);
+                isInPresent = true;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        if (isInPast) {
+            colorCode = "#AEB6BF";
+        }
+        else if (isInPresent) {
+            colorCode = "#328ee4";
+        }
 
         // Create an week view event.
         WeekViewEvent weekViewEvent = new WeekViewEvent();
