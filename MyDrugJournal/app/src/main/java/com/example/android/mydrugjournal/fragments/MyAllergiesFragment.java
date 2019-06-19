@@ -79,7 +79,6 @@ public class MyAllergiesFragment extends Fragment implements Observer {
                                     }
                                 }
                         ).show();
-//                recyclerAllergies.setAdapter(allergiesAdapter);
             }
         });
 
