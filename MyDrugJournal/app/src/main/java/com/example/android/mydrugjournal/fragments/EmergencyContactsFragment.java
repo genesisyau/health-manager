@@ -43,6 +43,7 @@ public class EmergencyContactsFragment extends Fragment implements Observer, Eme
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         progressBar = getView().findViewById(R.id.progressBar);
+        hideSpinner();
         mModel = EmergencyContactsModel.getInstance();
         mModel.register(this);
 
@@ -98,7 +99,7 @@ public class EmergencyContactsFragment extends Fragment implements Observer, Eme
     public void onResume() {
         super.onResume();
         showSpinner();
-        if (mModel.hasFetchedData()) {
+        if (mModel.hasFetchedData() || mModel.getContacts().size() == 0) {
             hideSpinner();
         }
     }

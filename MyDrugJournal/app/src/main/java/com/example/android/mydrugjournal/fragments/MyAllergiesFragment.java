@@ -42,6 +42,7 @@ public class MyAllergiesFragment extends Fragment implements Observer {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         progressBar = getView().findViewById(R.id.progressBar);
+        hideSpinner();
         mModel = AllergyModel.getInstance();
         mModel.register(this);
 
@@ -105,7 +106,7 @@ public class MyAllergiesFragment extends Fragment implements Observer {
     public void onResume() {
         super.onResume();
         showSpinner();
-        if (mModel.hasFetchedData()) {
+        if (mModel.hasFetchedData() || mModel.getAllergies().size() == 0) {
             hideSpinner();
         }
     }
