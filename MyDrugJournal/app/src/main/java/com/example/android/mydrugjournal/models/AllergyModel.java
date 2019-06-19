@@ -28,6 +28,8 @@ public class AllergyModel implements Subject {
     private FirebaseFirestore db;
     private FirebaseUser mCurrentUser;
 
+    private boolean hasFetchedData;
+
     private Allergy tmpAllergy;
 
     private AllergyModel() {
@@ -36,6 +38,7 @@ public class AllergyModel implements Subject {
         mAllergies = new ArrayList<>();
         mObservers = new ArrayList<>();
         tmpAllergy = new Allergy();
+        hasFetchedData = false;
         loadAllergies();
     }
 
@@ -57,6 +60,7 @@ public class AllergyModel implements Subject {
                             }
                         }
 
+                        hasFetchedData = true;
                         notifyObservers();
                     }
                 })
@@ -72,6 +76,10 @@ public class AllergyModel implements Subject {
 
     public ArrayList<Allergy> getAllergies() {
         return mAllergies;
+    }
+
+    public boolean hasFetchedData() {
+        return hasFetchedData;
     }
 
     @Override

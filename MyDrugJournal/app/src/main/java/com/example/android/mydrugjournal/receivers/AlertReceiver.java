@@ -38,7 +38,6 @@ public class AlertReceiver extends BroadcastReceiver {
                 (context, PRIMARY_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_pill)
                 .setContentTitle("It's time for your medications!")
-                .setContentText("Hello")
                 .setContentIntent(contentPendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true)

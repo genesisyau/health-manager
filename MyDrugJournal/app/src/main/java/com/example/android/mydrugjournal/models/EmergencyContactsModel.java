@@ -32,6 +32,8 @@ public class EmergencyContactsModel implements Subject {
     private FirebaseFirestore db;
     private FirebaseUser mCurrentUser;
 
+    private boolean hasFetchedData;
+
     private EmergencyContact tmpContact;
 
     private EmergencyContactsModel() {
@@ -40,6 +42,7 @@ public class EmergencyContactsModel implements Subject {
         mContacts = new ArrayList<>();
         mObservers = new ArrayList<>();
         tmpContact = new EmergencyContact();
+        hasFetchedData = false;
         loadContacts();
     }
 
@@ -49,6 +52,10 @@ public class EmergencyContactsModel implements Subject {
 
     public ArrayList<EmergencyContact> getContacts() {
         return mContacts;
+    }
+
+    public boolean hasFetchedData() {
+        return hasFetchedData;
     }
 
     public ArrayList<Observer> getObservers() {
@@ -111,6 +118,7 @@ public class EmergencyContactsModel implements Subject {
                             }
                         }
 
+                        hasFetchedData = true;
                         notifyObservers();
                     }
                 })
