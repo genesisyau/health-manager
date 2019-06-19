@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.android.mydrugjournal.R;
@@ -26,10 +27,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 public class SignupActivity extends AppCompatActivity {
 
     private EditText mEmail, mPassword1, mPassword2;
     private Button mSignupBtn;
+    private ProgressBar progressBar;
     private FirebaseAuth mAuth;
 
     @Override
@@ -40,6 +45,8 @@ public class SignupActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
+        progressBar = findViewById(R.id.progressBar);
+        hideSpinner();
         mEmail = findViewById(R.id.emailInput);
         mPassword1 = findViewById(R.id.passwordInput);
         mPassword2 = findViewById(R.id.confirmPasswordInput);
@@ -70,32 +77,11 @@ public class SignupActivity extends AppCompatActivity {
         userProfile.setCountry("");
         userProfile.setSex("");
 
-        Map<String, Object> meds = new HashMap<>();
-        Medication med = new Medication();
-        med.setName("");
-        med.setAdministration("");
-        med.setDescription("");
-        meds.put("medId", med);
-
-        Map<String, Object> contact = new HashMap<>();
-        EmergencyContact emergencyContact = new EmergencyContact();
-        emergencyContact.setName("");
-        emergencyContact.setAddress("");
-        emergencyContact.setPhoneNumber("");
-        contact.put("contactId", emergencyContact);
-
-        Map<String, Object> allergens = new HashMap<>();
-        Allergy allergy = new Allergy();
-        allergy.setAllergen("");
-        allergy.setDescription("");
-        allergens.put("allergyId1", allergy);
-        allergens.put("allergyId2", allergy);
-
         if (!isCorrectForm(emailText, password1Text, password2Text)) {
             return;
         }
 
-
+        showSpinner();
         mAuth.createUserWithEmailAndPassword(emailText, password1Text)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
 
@@ -111,9 +97,6 @@ public class SignupActivity extends AppCompatActivity {
 
                             //Adding default documents to Firestore
                             db.collection(user.getUid()).document("profile").set(userProfile);
-                            db.collection(user.getUid()).document("meds").set(meds);
-                            db.collection(user.getUid()).document("contacts").set(contact);
-                            db.collection(user.getUid()).document("allergies").set(allergens);
 
                             startActivity(new Intent(SignupActivity.this, SigninActivity.class));
                         } else {
@@ -123,6 +106,7 @@ public class SignupActivity extends AppCompatActivity {
                         }
                     }
                 });
+        hideSpinner();
     }
 
     private boolean isCorrectForm(String email, String password1, String password2) {
@@ -140,5 +124,14 @@ public class SignupActivity extends AppCompatActivity {
         }
 
         return true;
+    }
+
+
+    public void showSpinner() {
+        progressBar.setVisibility(VISIBLE);
+    }
+
+    public void hideSpinner() {
+        progressBar.setVisibility(GONE);
     }
 }

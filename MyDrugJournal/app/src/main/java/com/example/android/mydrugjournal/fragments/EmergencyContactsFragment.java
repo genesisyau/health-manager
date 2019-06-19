@@ -1,6 +1,7 @@
 package com.example.android.mydrugjournal.fragments;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -42,7 +43,7 @@ public class EmergencyContactsFragment extends Fragment implements Observer, Eme
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         progressBar = getView().findViewById(R.id.progressBar);
-        progressBar.setVisibility(getView().VISIBLE);
+        hideSpinner();
         mModel = EmergencyContactsModel.getInstance();
         mModel.register(this);
 
@@ -64,9 +65,22 @@ public class EmergencyContactsFragment extends Fragment implements Observer, Eme
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 String id = mModel.getContacts().get(viewHolder.getAdapterPosition()).getId();
-                mModel.deleteContactById(id);
-                contactsAdapter = new EmergencyContactsRecyclerAdapter(mModel.getContacts());
-                recyclerContacts.setAdapter(contactsAdapter);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage(getResources().getString(R.string.confirm_delete))
+                        .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
+                            mModel.deleteContactById(id);
+                            contactsAdapter = new EmergencyContactsRecyclerAdapter(mModel.getContacts());
+                            recyclerContacts.setAdapter(contactsAdapter);
+                            Toast.makeText(getActivity(), "Deleted successfully", Toast.LENGTH_SHORT).show();
+                        })
+                        .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        contactsAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                                        Toast.makeText(getActivity(), "Deletion cancelled", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                        ).show();
             }
         });
 
@@ -85,13 +99,14 @@ public class EmergencyContactsFragment extends Fragment implements Observer, Eme
     public void onResume() {
         super.onResume();
         showSpinner();
-        if (mModel.hasFetchedData()) {
+        if (mModel.hasFetchedData() || mModel.getContacts().size() == 0) {
             hideSpinner();
         }
     }
 
     @Override
     public void update() {
+        showSpinner();
         contactsAdapter = new EmergencyContactsRecyclerAdapter(mModel.getContacts(), this);
         recyclerContacts.setAdapter(contactsAdapter);
         hideSpinner();
