@@ -85,6 +85,9 @@ public class EmergencyContactsFragment extends Fragment implements Observer, Eme
     public void onResume() {
         super.onResume();
         showSpinner();
+        if (mModel.hasFetchedData()) {
+            hideSpinner();
+        }
     }
 
     @Override

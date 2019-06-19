@@ -137,6 +137,19 @@ public class WeeklyScheduleFragment extends Fragment implements Observer {
 
     private WeekViewEvent addNewEvent(int year, int month, int day, int hour, int minutes, int medNumber) {
         // Initialize start and end time.
+        boolean isInPast = false;
+        String date = day + "/" + (month + 1) % 12 + "/" + year + " " + hour + ":" + minutes;
+        try {
+            if (new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(date).before(new java.util.Date())) {
+                Log.i("DATE", "PAST: " + date);
+                isInPast = true;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        String colorCode = (isInPast == true) ? "#AEB6BF" : "#32CD32";
+
         Calendar now = Calendar.getInstance();
 
         Calendar eventTime = (Calendar) now.clone();
@@ -158,7 +171,7 @@ public class WeeklyScheduleFragment extends Fragment implements Observer {
         weekViewEvent.setName("Meds x" + medNumber);
         weekViewEvent.setStartTime(eventTime);
         weekViewEvent.setEndTime(endTime);
-        weekViewEvent.setColor(Color.parseColor("#32CD32"));
+        weekViewEvent.setColor(Color.parseColor(colorCode));
 
         return weekViewEvent;
     }

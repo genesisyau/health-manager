@@ -106,6 +106,9 @@ public class MyAllergiesFragment extends Fragment implements Observer {
     public void onResume() {
         super.onResume();
         showSpinner();
+        if (mModel.hasFetchedData()) {
+            hideSpinner();
+        }
     }
 
     @Override
