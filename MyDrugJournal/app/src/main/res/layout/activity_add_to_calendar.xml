@@ -45,7 +45,7 @@
                 android:id="@+id/time_picker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:headerBackground="#0000FF"
+                android:headerBackground="#328ee4"
                 android:timePickerMode="clock" />
 
             <Button
