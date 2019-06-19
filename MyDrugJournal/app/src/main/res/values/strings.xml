@@ -55,7 +55,7 @@
         <item>Rectal</item>
         <item>Inhalation</item>
         <item>Injection</item>
-        <item></item>
+        <item>Other</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->

@@ -39,6 +39,7 @@ import java.util.List;
 
 public class WeeklyScheduleFragment extends Fragment implements Observer {
     private final static String MEDICATIONS_KEY = "MEDKEY";
+    private final static String DATE_KEY = "DATEKEY";
 
     private WeekView mWeekView;
 
@@ -96,6 +97,7 @@ public class WeeklyScheduleFragment extends Fragment implements Observer {
         Intent intent = new Intent(getActivity(), DateMedicationsActivity.class);
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(MEDICATIONS_KEY, medications);
+        bundle.putString(DATE_KEY, event.getStartTime().get(Calendar.DAY_OF_MONTH) + "/" + ((event.getStartTime().get(Calendar.MONTH) + 1) % 12) + "/" + event.getStartTime().get(Calendar.YEAR));
         intent.putExtras(bundle);
         startActivity(intent);
     };

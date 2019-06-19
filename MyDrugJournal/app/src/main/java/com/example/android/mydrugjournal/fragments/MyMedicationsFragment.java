@@ -8,21 +8,15 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.android.mydrugjournal.activities.AddNewMedicationActivity;
 import com.example.android.mydrugjournal.R;
 import com.example.android.mydrugjournal.adapters.MedicationsRecyclerAdapter;
-import com.example.android.mydrugjournal.data.Medication;
 import com.example.android.mydrugjournal.interfaces.Observer;
 import com.example.android.mydrugjournal.models.MedicationModel;
-
-import java.util.ArrayList;
-import java.util.Observable;
 
 public class MyMedicationsFragment extends Fragment implements Observer {
     public static final String MODEL_KEY = "MODELKEY";
