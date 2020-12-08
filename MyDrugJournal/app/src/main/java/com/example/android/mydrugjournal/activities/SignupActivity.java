@@ -90,18 +90,14 @@ public class SignupActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("AUTH", "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Log.d("USER", mAuth.getCurrentUser().getUid());
 
                             //Adding default documents to Firestore
                             db.collection(user.getUid()).document("profile").set(userProfile);
 
                             startActivity(new Intent(SignupActivity.this, SigninActivity.class));
                         } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w("TAG", "createUserWithEmail:failure", task.getException());
+                            Log.w("fail", "createUserWithEmail:failure", task.getException());
                             Toast.makeText(SignupActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                         }
                     }

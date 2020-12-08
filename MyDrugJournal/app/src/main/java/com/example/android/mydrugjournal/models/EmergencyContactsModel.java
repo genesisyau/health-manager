@@ -140,8 +140,8 @@ public class EmergencyContactsModel implements Subject {
     public void deleteContactById(String id) {
         String documentRoute = mCurrentUser.getUid() + "/" + CONTACT_DOC_NAME;
         DocumentReference docRef = db.document(documentRoute);
-        Log.d("delete", id);
-        // Remove the 'capital' field from the document
+
+        // Remove the 'id' field from the document
         Map<String,Object> updates = new HashMap<>();
         updates.put(id, FieldValue.delete());
 
