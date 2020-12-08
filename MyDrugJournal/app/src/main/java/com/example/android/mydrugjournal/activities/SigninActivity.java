@@ -37,6 +37,9 @@ public class SigninActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
+        SigninActivity.this.finish();
+        startActivity(new Intent(this, MainActivity.class));
+
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null) {
             //open the home page directly if a user is already logged in
